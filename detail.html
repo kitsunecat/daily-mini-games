@@ -54,7 +54,7 @@
           <div class="info">
             <h3>あそびかた</h3><p>${esc(game.description)}</p>
             <h3>操作方法</h3><p>${esc(game.controls)}</p>
-            <h3>参考にした作品</h3><p>${esc(ib.title)}（${esc(ib.store)} ${ib.rank ? esc(ib.rank) + '位' : ''}）</p>
+            ${ib.title ? `<h3>参考にした作品</h3><p>${esc(ib.title)}（${esc(ib.store)} ${ib.rank ? esc(ib.rank) + '位' : ''}）</p>` : ''}
             <a class="play-btn" href="${base}index.html">▶ プレイする</a>
           </div>
         </div>
