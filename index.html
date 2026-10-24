@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Mini Games</title>
+<style>
+  :root { --bg: #f6f5f2; --card: #fff; --text: #222; --sub: #777; --accent: #e8590c; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #151515; --card: #222; --text: #eee; --sub: #999; --accent: #ff8a3d; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; }
+  p.lead { color: var(--sub); margin: 0 0 24px; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  a.card { display: block; padding: 16px; background: var(--card); border-radius: 12px;
+           text-decoration: none; color: inherit; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  a.card:active { transform: scale(.99); }
+  .date { color: var(--sub); font-size: .85rem; }
+  .title { font-size: 1.15rem; font-weight: 600; margin: 2px 0 4px; color: var(--accent); }
+  .desc { font-size: .95rem; }
+  .empty { color: var(--sub); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Daily Mini Games</h1>
+  <p class="lead">スマホゲームのランキング上位作品を参考に、毎日1本ずつ作っている簡易版ブラウザゲーム集です。</p>
+  <ul id="list"><li class="empty">読み込み中…</li></ul>
+</main>
+<script>
+  // games.json: [{ "date": "YYYY-MM-DD", "slug": "YYYY-MM-DD-name", "title": "...", "description": "..." }]
+  fetch('games.json', { cache: 'no-cache' })
+    .then(r => r.json())
+    .then(games => {
+      const list = document.getElementById('list');
+      list.innerHTML = '';
+      if (!games.length) {
+        list.innerHTML = '<li class="empty">まだゲームはありません。</li>';
+        return;
+      }
+      games.sort((a, b) => b.date.localeCompare(a.date)).forEach(g => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = 'games/' + g.slug + '/';
+        a.innerHTML = '<div class="date"></div><div class="title"></div><div class="desc"></div>';
+        a.querySelector('.date').textContent = g.date;
+        a.querySelector('.title').textContent = g.title;
+        a.querySelector('.desc').textContent = g.description || '';
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    })
+    .catch(() => {
+      document.getElementById('list').innerHTML = '<li class="empty">一覧を読み込めませんでした。</li>';
+    });
+</script>
+</body>
+</html>
