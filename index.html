@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Daily Mini Games</title>
+  <meta name="description" content="スマホゲームのランキング上位作品を参考に、毎日1本ずつ作る簡易版ブラウザゲーム集">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="brand-mark">▶</span>Daily Mini Games</a>
+      <nav><a href="https://github.com/kitsunecat/daily-mini-games">GitHub</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>毎日ひとつ、ちいさなゲーム。</h1>
+      <p>その日のスマホゲームランキング上位作品から「核となる面白さ」だけを抜き出して、ブラウザで遊べる簡易版を毎日1本作っています。</p>
+    </section>
+    <div id="list" class="grid" aria-live="polite"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">各ゲームはオリジナルの名前・グラフィックで作られた非公式の簡易版です。参考作品の権利は各権利者に帰属します。</div>
+  </footer>
+
+  <script>
+    (async () => {
+      const list = document.getElementById('list');
+      const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      try {
+        const res = await fetch('games.json', { cache: 'no-cache' });
+        if (!res.ok) throw new Error(res.status);
+        const games = await res.json();
+        games.sort((a, b) => (b.date + b.id).localeCompare(a.date + a.id));
+        if (!games.length) { list.innerHTML = '<p class="empty">まだゲームがありません。</p>'; return; }
+        list.innerHTML = games.map((g, i) => `
+          <a class="game-card" href="detail.html?id=${encodeURIComponent(g.id)}">
+            <div class="thumb"><img src="${esc(g.screenshot)}" alt="${esc(g.title)} のスクリーンショット" loading="lazy"></div>
+            <div class="body">
+              <h2>${esc(g.title)}</h2>
+              <div class="meta">
+                <time datetime="${esc(g.date)}">${esc(g.date)}</time>
+                <span class="tag">${esc(g.genre)}</span>
+                ${i === 0 ? '<span class="tag badge-new">NEW</span>' : ''}
+              </div>
+            </div>
+          </a>`).join('');
+      } catch (e) {
+        list.innerHTML = '<p class="error">ゲーム一覧を読み込めませんでした。</p>';
+      }
+    })();
+  </script>
+</body>
+</html>
