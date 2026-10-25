@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-26-lane-dash",
+    "date": "2026-10-26",
+    "title": "レーンダッシュ",
+    "genre": "エンドレスランナー",
+    "inspiredBy": {
+      "title": "Subway Surfers",
+      "store": "Google Play"
+    },
+    "description": "3本のレーンをひたすら走り続けるエンドレスランナー。低い柵はジャンプ、「LOW」ゲートはスライディング、長いコンテナは横のレーンへよけてかわそう。コインを集めて距離を伸ばすほどスコアアップ。走るほどスピードが上がっていく！",
+    "controls": "スマホ：左右スワイプでレーン移動、上スワイプでジャンプ、下スワイプでスライディング（画面の左右タップでも移動）。PC：←→ / A D で移動、↑ / W / Space でジャンプ、↓ / S でスライディング、Enter でスタート。",
+    "files": [
+      "index.html",
+      "game.js",
+      "style.css"
+    ],
+    "screenshot": "games/2026-10-26-lane-dash/screenshot.png",
+    "slug": "2026-10-26-lane-dash"
+  },
+  {
     "id": "2026-10-25-block-fit",
     "date": "2026-10-25",
     "title": "ブロックはめ",
