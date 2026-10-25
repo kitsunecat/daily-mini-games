@@ -58,6 +58,7 @@
             <a class="play-btn" href="${base}index.html"><span class="icon" aria-hidden="true">play_arrow</span>プレイする</a>
           </div>
         </div>
+        <div id="lesson-slot"></div>
         <section class="source">
           <div class="source-head">
             <h2>ソースコード</h2>
@@ -66,6 +67,21 @@
           <div class="tabs" role="tablist"></div>
           <pre class="code"><code id="code">読み込み中…</code></pre>
         </section>`;
+
+      // ハンズオン教材があれば導線を出す（lessons.json に載っている id のみ）
+      fetch('lessons.json', { cache: 'no-cache' })
+        .then((r) => (r.ok ? r.json() : []))
+        .then((lessons) => {
+          const lesson = lessons.find((l) => l.id === game.id);
+          if (!lesson) return;
+          document.getElementById('lesson-slot').innerHTML = `
+            <a class="lesson-link" href="lesson.html?id=${encodeURIComponent(game.id)}">
+              <span class="icon" aria-hidden="true">school</span>
+              <span><strong>ハンズオン教材：このゲームをイチから作ってみよう</strong><small>${esc(lesson.steps)} ステップ${lesson.duration ? '・' + esc(lesson.duration) : ''}。各ステップで動く完成形を確認しながら進めます。</small></span>
+              <span class="icon go" aria-hidden="true">arrow_forward</span>
+            </a>`;
+        })
+        .catch(() => { /* 教材なし */ });
 
       const tabs = content.querySelector('.tabs');
       const codeEl = document.getElementById('code');
