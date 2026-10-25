@@ -126,15 +126,21 @@ a { color: var(--md-primary); }
   line-height: 28px;
 }
 .brand-mark {
-  display: grid; place-items: center;
+  position: relative;
+  flex: none;
   width: 40px; height: 40px;
   border-radius: var(--md-shape-m);
   background: var(--md-primary-container);
   color: var(--md-on-primary-container);
   font-size: 0;
 }
+/* 元の「▶」は隠し、アイコンを枠の中央に重ねる */
 .brand-mark::before {
   content: "sports_esports";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
   font-family: "Material Symbols Rounded";
   font-size: 24px;
   font-feature-settings: "liga";
