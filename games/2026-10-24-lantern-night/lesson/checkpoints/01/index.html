@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <title>ランタン守りの夜</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div id="title" class="overlay">
+    <div class="panel">
+      <div class="logo">🏮</div>
+      <h1>ランタン守りの夜</h1>
+      <p class="sub">夜明けまで 5 分。影の群れから生き延びろ！</p>
+      <ul class="howto">
+        <li><b>移動</b>：WASD / 矢印キー、またはスマホは画面をドラッグ</li>
+        <li><b>攻撃</b>：自動。近くの影に光の弾を撃つ</li>
+        <li><b>成長</b>：青い光のかけらを集めてレベルアップ。3 つの強化から 1 つを選ぶ</li>
+        <li><b>4:00</b> に大きな影が出現。<b>5:00</b> の夜明けまで生き残ればクリア</li>
+      </ul>
+      <button class="btn primary" id="startBtn">はじめる</button>
+      <a class="back" href="../../../../">← ゲーム一覧へ</a>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

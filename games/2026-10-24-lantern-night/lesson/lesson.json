@@ -1,0 +1,37 @@
+{
+  "title": "ランタン守りの夜をイチから作ろう",
+  "summary": "迫りくる影の群れから夜明けまで生き延びる、サバイバー系アクションゲームを Canvas と素の JavaScript だけで作ります。ゲームループ、たくさんの敵の管理、当たり判定、レベルアップで強化を選ぶしくみ、光と闇の演出まで、アクションゲーム作りの基本がひととおり身につきます。",
+  "level": "初級〜中級",
+  "duration": "約150分",
+  "goals": [
+    "requestAnimationFrame と経過時間（dt）を使ったゲームループを作れる",
+    "ワールド座標とカメラ、setTransform を使ってスクロールする広いマップを描ける",
+    "キーボードと Pointer Events（仮想スティック）の両方で移動を作れる",
+    "配列でたくさんの敵・弾・エフェクトを管理し、円どうしの当たり判定を書ける",
+    "時間で増える出現ペースや、群れ・ボスなどのイベントを管理できる",
+    "データの表から強化カードを作り、レベルアップで3択から選ぶしくみを作れる",
+    "放射状グラデーションと加算合成で、闇と光の演出を描ける",
+    "localStorage でハイスコアを保存し、一時停止・リザルト画面で仕上げられる"
+  ],
+  "prerequisites": [
+    "HTML・CSS・JavaScript の基礎（変数、関数、配列、オブジェクト、if / for）が少し分かること",
+    "テキストエディタ（VS Code など）とブラウザ（Chrome / Safari / Firefox など）",
+    "ビルドツールや外部ライブラリは使いません"
+  ],
+  "setup": "作業用のフォルダ（例: `lantern-night`）を1つ作り、そこに `index.html`・`style.css`・`game.js` を置いて進めます。`index.html` をブラウザで直接開けば動きます。\n\nコードを書き換えたらブラウザを再読み込みして確認しましょう。うまく動かないときは開発者ツール（F12 / Mac は ⌥⌘I）の **Console** にエラーが出ていないか見てください。各ステップの「ここまでの完成形を動かす」「ここまでのコード」で、正解のコードと見比べることもできます。\n\nこのゲームはコードが長めです（完成時に約900行）。追加する場所は「〇〇の下」「〇〇の上」のように書いてあるので、エディタの検索（Ctrl+F / ⌘F）で目印の行を探しながら進めると迷いません。",
+  "steps": [
+    { "title": "ファイル構成と画面の土台", "file": "steps/01.md", "checkpoint": "checkpoints/01/" },
+    { "title": "ゲームループと草原・キツネを描く", "file": "steps/02.md", "checkpoint": "checkpoints/02/" },
+    { "title": "キーボードと仮想スティックで動かす", "file": "steps/03.md", "checkpoint": "checkpoints/03/" },
+    { "title": "影を出現させて追いかけさせる", "file": "steps/04.md", "checkpoint": "checkpoints/04/" },
+    { "title": "当たり判定・HP・HUD", "file": "steps/05.md", "checkpoint": "checkpoints/05/" },
+    { "title": "自動で撃つ光の弾", "file": "steps/06.md", "checkpoint": "checkpoints/06/" },
+    { "title": "光のかけらと経験値", "file": "steps/07.md", "checkpoint": "checkpoints/07/" },
+    { "title": "レベルアップで強化を選ぶ", "file": "steps/08.md", "checkpoint": "checkpoints/08/" },
+    { "title": "灯火・月光の波・流れ星", "file": "steps/09.md", "checkpoint": "checkpoints/09/" },
+    { "title": "夜の闇とランタンの明かり", "file": "steps/10.md", "checkpoint": "checkpoints/10/" },
+    { "title": "影の群れと大きな影", "file": "steps/11.md", "checkpoint": "checkpoints/11/" },
+    { "title": "一時停止・リザルト・ハイスコアで仕上げ", "file": "steps/12.md", "checkpoint": "checkpoints/12/" }
+  ],
+  "outro": "おつかれさまでした！ 敵・弾・かけら・エフェクトをすべて「配列に入れて、毎フレーム動かして、寿命が尽きたら filter で消す」という同じ形で扱えば、数百体が動き回るゲームでも整理して書けることを体験できたと思います。強化や敵を「データの表」にしておく考え方は、RPG やタワーディフェンスなど、ほかのジャンルにもそのまま使えます。改造アイデアを試して、自分だけの夜を作ってみてください。"
+}

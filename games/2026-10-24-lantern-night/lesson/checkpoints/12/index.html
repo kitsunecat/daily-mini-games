@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <title>ランタン守りの夜</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div id="hud" class="hidden">
+    <div id="xpbar"><div id="xpfill"></div></div>
+    <div class="hudrow">
+      <div class="hp"><div id="hpfill"></div><span id="hptext">100</span></div>
+      <div id="timer">夜明けまで 5:00</div>
+      <div class="stat">Lv<b id="lv">1</b></div>
+      <div class="stat">撃破<b id="kills">0</b></div>
+      <button id="pauseBtn" aria-label="一時停止">II</button>
+    </div>
+    <div id="banner"></div>
+  </div>
+
+  <div id="title" class="overlay">
+    <div class="panel">
+      <div class="logo">🏮</div>
+      <h1>ランタン守りの夜</h1>
+      <p class="sub">夜明けまで 5 分。影の群れから生き延びろ！</p>
+      <ul class="howto">
+        <li><b>移動</b>：WASD / 矢印キー、またはスマホは画面をドラッグ</li>
+        <li><b>攻撃</b>：自動。近くの影に光の弾を撃つ</li>
+        <li><b>成長</b>：青い光のかけらを集めてレベルアップ。3 つの強化から 1 つを選ぶ</li>
+        <li><b>4:00</b> に大きな影が出現。<b>5:00</b> の夜明けまで生き残ればクリア</li>
+      </ul>
+      <p class="best">ハイスコア：<b id="bestTitle">0</b></p>
+      <button class="btn primary" id="startBtn">はじめる</button>
+      <a class="back" href="../../../../">← ゲーム一覧へ</a>
+    </div>
+  </div>
+
+  <div id="levelup" class="overlay hidden">
+    <div class="panel wide">
+      <h2>レベルアップ！</h2>
+      <p class="sub">強化をひとつ選ぼう（1 / 2 / 3 キーでも選択可）</p>
+      <div id="cards"></div>
+    </div>
+  </div>
+
+  <div id="pause" class="overlay hidden">
+    <div class="panel">
+      <h2>一時停止中</h2>
+      <div id="owned"></div>
+      <button class="btn primary" id="resumeBtn">再開する</button>
+      <button class="btn" id="restartBtn">最初からやり直す</button>
+      <a class="back" href="../../../../">← ゲーム一覧へ</a>
+    </div>
+  </div>
+
+  <div id="result" class="overlay hidden">
+    <div class="panel">
+      <h2 id="resultTitle">夜明けだ！</h2>
+      <p class="sub" id="resultSub"></p>
+      <dl class="stats">
+        <dt>生存時間</dt><dd id="rTime">0:00</dd>
+        <dt>撃破数</dt><dd id="rKills">0</dd>
+        <dt>レベル</dt><dd id="rLevel">1</dd>
+        <dt>スコア</dt><dd id="rScore">0</dd>
+      </dl>
+      <p class="record hidden" id="newRecord">★ ハイスコア更新！ ★</p>
+      <p class="best">ハイスコア：<b id="bestResult">0</b></p>
+      <button class="btn primary" id="retryBtn">もう一度あそぶ</button>
+      <a class="back" href="../../../../">← ゲーム一覧へ</a>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
