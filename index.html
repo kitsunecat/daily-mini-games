@@ -54,5 +54,9 @@
       }
     })();
   </script>
+  <script>
+    // スクロール時にトップアプリバーを浮かせる
+    addEventListener('scroll', () => document.querySelector('.site-header').classList.toggle('scrolled', scrollY > 4), { passive: true });
+  </script>
 </body>
 </html>

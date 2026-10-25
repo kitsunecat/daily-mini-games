@@ -17,7 +17,7 @@
   </header>
 
   <main class="wrap" id="main">
-    <div class="crumb"><a href="index.html">← ゲーム一覧</a></div>
+    <div class="crumb"><a href="index.html"><span class="icon" aria-hidden="true">arrow_back</span>ゲーム一覧</a></div>
     <div id="content"><p class="empty">読み込み中…</p></div>
   </main>
 
@@ -55,13 +55,13 @@
             <h3>あそびかた</h3><p>${esc(game.description)}</p>
             <h3>操作方法</h3><p>${esc(game.controls)}</p>
             ${ib.title ? `<h3>参考にした作品</h3><p>${esc(ib.title)}（${esc(ib.store)} ${ib.rank ? esc(ib.rank) + '位' : ''}）</p>` : ''}
-            <a class="play-btn" href="${base}index.html">▶ プレイする</a>
+            <a class="play-btn" href="${base}index.html"><span class="icon" aria-hidden="true">play_arrow</span>プレイする</a>
           </div>
         </div>
         <section class="source">
           <div class="source-head">
             <h2>ソースコード</h2>
-            <a href="${REPO}/tree/main/games/${encodeURIComponent(game.id)}" target="_blank" rel="noopener">GitHub でフォルダを見る ↗</a>
+            <a href="${REPO}/tree/main/games/${encodeURIComponent(game.id)}" target="_blank" rel="noopener">GitHub でフォルダを見る<span class="icon" aria-hidden="true" style="font-size:18px;margin-left:4px">open_in_new</span></a>
           </div>
           <div class="tabs" role="tablist"></div>
           <pre class="code"><code id="code">読み込み中…</code></pre>
@@ -101,6 +101,10 @@
       });
       if (game.files && game.files.length) show(game.files[0]);
     })();
+  </script>
+  <script>
+    // スクロール時にトップアプリバーを浮かせる
+    addEventListener('scroll', () => document.querySelector('.site-header').classList.toggle('scrolled', scrollY > 4), { passive: true });
   </script>
 </body>
 </html>
