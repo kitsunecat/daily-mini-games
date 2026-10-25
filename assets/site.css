@@ -455,7 +455,7 @@ a { color: var(--md-primary); }
 .lesson-end .play-btn { max-width: 320px; margin: 20px auto 0; }
 
 @media (max-width: 900px) {
-  .lesson-layout { grid-template-columns: 1fr; gap: 16px; }
+  .lesson-layout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .toc { position: static; max-height: none; background: var(--md-surface-container); border-radius: var(--md-shape-l); padding: 12px 8px; }
 }
 @media (max-width: 599px) {
