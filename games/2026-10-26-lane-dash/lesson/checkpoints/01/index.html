@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>レーンダッシュ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>COIN</span><b id="coins">0</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">レーンダッシュ</h1>
+      <p id="ov-text">3本のレーンを走り続けよう。<br>スワイプで左右に移動、上でジャンプ、下でスライディング。<br>柵はジャンプ、ゲートはスライディング、<br>コンテナは横によけてね。コインも集めよう！</p>
+      <p class="keys">PC: ←→ / A D で移動 ／ ↑ W Space でジャンプ ／ ↓ S でスライディング</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
