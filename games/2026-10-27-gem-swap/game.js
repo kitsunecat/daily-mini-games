@@ -1,0 +1,561 @@
+(() => {
+  'use strict';
+
+  const N = 8;
+  const COLORS = 6;
+  const MAX_MOVES = 25;
+  const BEST_KEY = 'gem-swap-best';
+  // special: 0 なし, 1 横ライン, 2 縦ライン, 3 カラーボム
+  const PALETTE = [
+    ['#ff5f7e', '#c2184b'], // ハート系の赤（丸）
+    ['#ffb238', '#c76a00'], // オレンジ（ひし形）
+    ['#ffe45c', '#b49b00'], // 黄（星）
+    ['#4cd97b', '#14843d'], // 緑（四角）
+    ['#4cb8ff', '#1462b4'], // 青（しずく型の三角）
+    ['#c27dff', '#6b2fb3'], // 紫（六角形）
+  ];
+
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const stage = document.getElementById('stage');
+  const overlay = document.getElementById('overlay');
+  const ovTitle = document.getElementById('ov-title');
+  const ovText = document.getElementById('ov-text');
+  const startBtn = document.getElementById('start');
+  const movesEl = document.getElementById('moves');
+  const scoreEl = document.getElementById('score');
+  const bestEl = document.getElementById('best');
+  const comboEl = document.getElementById('combo');
+
+  let size = 0, cell = 0, dpr = 1;
+  let grid = [];
+  let state = 'title'; // title, idle, swap, unswap, clear, fall, over
+  let anim = null;
+  let selected = null;
+  let moves = MAX_MOVES, score = 0, combo = 0;
+  let best = 0;
+  let particles = [];
+  let lastSwap = null;
+  let comboTimer = 0;
+
+  try { best = parseInt(localStorage.getItem(BEST_KEY), 10) || 0; } catch (e) { best = 0; }
+  bestEl.textContent = best;
+
+  // ---------- サウンド（Web Audio で生成） ----------
+  let actx = null;
+  function beep(freq, dur, type, vol) {
+    try {
+      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = actx.createOscillator();
+      const g = actx.createGain();
+      o.type = type || 'sine';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(vol || 0.08, actx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(); o.stop(actx.currentTime + dur);
+    } catch (e) { /* 音が出せなくても遊べる */ }
+  }
+
+  // ---------- 盤面 ----------
+  const rnd = (n) => Math.floor(Math.random() * n);
+  const gem = (t, s) => ({ t, s: s || 0, dy: 0, scale: 1 });
+  const inside = (r, c) => r >= 0 && r < N && c >= 0 && c < N;
+
+  function newBoard() {
+    do {
+      grid = [];
+      for (let r = 0; r < N; r++) {
+        grid.push([]);
+        for (let c = 0; c < N; c++) {
+          let t;
+          do { t = rnd(COLORS); } while (
+            (c >= 2 && grid[r][c - 1].t === t && grid[r][c - 2].t === t) ||
+            (r >= 2 && grid[r - 1][c].t === t && grid[r - 2][c].t === t)
+          );
+          grid[r].push(gem(t));
+        }
+      }
+    } while (!hasMove());
+  }
+
+  function findRuns() {
+    const runs = [];
+    for (let r = 0; r < N; r++) {
+      let c = 0;
+      while (c < N) {
+        const t = grid[r][c].t;
+        let e = c + 1;
+        while (e < N && t < COLORS && grid[r][e].t === t) e++;
+        if (t < COLORS && e - c >= 3) runs.push({ dir: 'h', t, cells: range(c, e).map((x) => [r, x]) });
+        c = e;
+      }
+    }
+    for (let c = 0; c < N; c++) {
+      let r = 0;
+      while (r < N) {
+        const t = grid[r][c].t;
+        let e = r + 1;
+        while (e < N && t < COLORS && grid[e][c].t === t) e++;
+        if (t < COLORS && e - r >= 3) runs.push({ dir: 'v', t, cells: range(r, e).map((y) => [y, c]) });
+        r = e;
+      }
+    }
+    return runs;
+  }
+  function range(a, b) { const o = []; for (let i = a; i < b; i++) o.push(i); return o; }
+
+  function swapCells(a, b) {
+    const tmp = grid[a[0]][a[1]];
+    grid[a[0]][a[1]] = grid[b[0]][b[1]];
+    grid[b[0]][b[1]] = tmp;
+  }
+
+  function hasMove() {
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        if (grid[r][c].s === 3) return true;
+        for (const [dr, dc] of [[0, 1], [1, 0]]) {
+          const r2 = r + dr, c2 = c + dc;
+          if (!inside(r2, c2)) continue;
+          swapCells([r, c], [r2, c2]);
+          const ok = findRuns().length > 0;
+          swapCells([r, c], [r2, c2]);
+          if (ok) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function shuffle() {
+    const all = [];
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) all.push(grid[r][c]);
+    let tries = 0;
+    do {
+      for (let i = all.length - 1; i > 0; i--) {
+        const j = rnd(i + 1);
+        [all[i], all[j]] = [all[j], all[i]];
+      }
+      for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) grid[r][c] = all[r * N + c];
+      tries++;
+    } while ((findRuns().length > 0 || !hasMove()) && tries < 200);
+    if (tries >= 200) newBoard();
+    showCombo('シャッフル！');
+  }
+
+  // ---------- 消去処理 ----------
+  const key = (r, c) => r * N + c;
+
+  function expandSpecials(set, colorFor) {
+    const queue = [...set];
+    const done = new Set();
+    while (queue.length) {
+      const k = queue.pop();
+      if (done.has(k)) continue;
+      done.add(k);
+      const r = Math.floor(k / N), c = k % N;
+      const g = grid[r][c];
+      let add = [];
+      if (g.s === 1) add = range(0, N).map((x) => key(r, x));
+      else if (g.s === 2) add = range(0, N).map((y) => key(y, c));
+      else if (g.s === 3) {
+        const t = colorFor != null && colorFor.k === k ? colorFor.t : mostCommonColor();
+        for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+          if (t === -1 || grid[y][x].t === t) add.push(key(y, x));
+        }
+      }
+      if (add.length) burstLine(g.s, r, c);
+      for (const a of add) if (!set.has(a)) { set.add(a); queue.push(a); }
+    }
+  }
+
+  function mostCommonColor() {
+    const cnt = new Array(COLORS).fill(0);
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) if (grid[r][c].t < COLORS) cnt[grid[r][c].t]++;
+    return cnt.indexOf(Math.max(...cnt));
+  }
+
+  // 消すマスと、新しく生まれる特殊ジェムを決める
+  function planClear(runs, extra) {
+    const set = new Set(extra ? extra.set : []);
+    const spawns = [];
+    for (const run of runs) for (const [r, c] of run.cells) set.add(key(r, c));
+    for (const run of runs) {
+      if (run.cells.length < 4) continue;
+      let pos = run.cells[Math.floor(run.cells.length / 2)];
+      if (lastSwap) {
+        for (const p of lastSwap) {
+          if (run.cells.some(([r, c]) => r === p[0] && c === p[1])) { pos = p; break; }
+        }
+      }
+      const k = key(pos[0], pos[1]);
+      if (spawns.some((s) => s.k === k)) continue;
+      const s = run.cells.length >= 5 ? 3 : (run.dir === 'h' ? 1 : 2);
+      spawns.push({ k, t: s === 3 ? COLORS : run.t, s });
+    }
+    expandSpecials(set, extra ? extra.colorFor : null);
+    for (const sp of spawns) {
+      // 生まれる場所にあった特殊ジェムは既に発動済みなので上書きしてよい
+      set.delete(sp.k);
+    }
+    return { set, spawns };
+  }
+
+  function startClear(plan) {
+    combo++;
+    const n = plan.set.size;
+    const gained = n * 10 * combo + plan.spawns.length * 50;
+    score += gained;
+    scoreEl.textContent = score;
+    if (combo >= 2) showCombo(combo + ' 連鎖！');
+    beep(440 + combo * 90, 0.15, 'triangle', 0.09);
+    if (plan.spawns.length) setTimeout(() => beep(990, 0.2, 'square', 0.05), 80);
+    for (const k of plan.set) {
+      const r = Math.floor(k / N), c = k % N;
+      spawnParticles(r, c, grid[r][c].t);
+    }
+    state = 'clear';
+    anim = { t: 0, dur: 220, plan };
+  }
+
+  function finishClear(plan) {
+    for (const k of plan.set) {
+      grid[Math.floor(k / N)][k % N] = null;
+    }
+    for (const sp of plan.spawns) {
+      grid[Math.floor(sp.k / N)][sp.k % N] = gem(sp.t, sp.s);
+    }
+    // 落下
+    for (let c = 0; c < N; c++) {
+      let w = N - 1;
+      for (let r = N - 1; r >= 0; r--) {
+        const g = grid[r][c];
+        if (g) {
+          grid[r][c] = null;
+          grid[w][c] = g;
+          g.dy = r - w; // 負の値＝上から落ちてくる
+          w--;
+        }
+      }
+      const empty = w + 1;
+      for (let r = w; r >= 0; r--) {
+        const g = gem(rnd(COLORS));
+        g.dy = -empty - 0.5;
+        g.scale = 1;
+        grid[r][c] = g;
+      }
+    }
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) grid[r][c].scale = 1;
+    lastSwap = null;
+    state = 'fall';
+  }
+
+  function settle() {
+    const runs = findRuns();
+    if (runs.length) {
+      startClear(planClear(runs));
+      return;
+    }
+    combo = 0;
+    if (moves <= 0) { gameOver(); return; }
+    if (!hasMove()) shuffle();
+    state = 'idle';
+  }
+
+  // ---------- 入れかえ ----------
+  function trySwap(a, b) {
+    if (state !== 'idle') return;
+    if (Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) !== 1) return;
+    selected = null;
+    state = 'swap';
+    anim = { t: 0, dur: 160, a, b };
+    beep(330, 0.06, 'sine', 0.05);
+  }
+
+  function afterSwap(a, b) {
+    swapCells(a, b);
+    const ga = grid[a[0]][a[1]], gb = grid[b[0]][b[1]];
+    lastSwap = [a, b];
+    // カラーボムを動かした場合
+    if (ga.s === 3 || gb.s === 3) {
+      moves--; movesEl.textContent = moves;
+      const set = new Set();
+      let colorFor = null;
+      if (ga.s === 3 && gb.s === 3) {
+        set.add(key(a[0], a[1])); set.add(key(b[0], b[1]));
+        colorFor = { k: key(a[0], a[1]), t: -1 };
+      } else {
+        const bomb = ga.s === 3 ? a : b;
+        const other = ga.s === 3 ? gb : ga;
+        set.add(key(bomb[0], bomb[1]));
+        colorFor = { k: key(bomb[0], bomb[1]), t: other.t };
+        if (other.s) set.add(ga.s === 3 ? key(b[0], b[1]) : key(a[0], a[1]));
+      }
+      startClear(planClear(findRuns(), { set, colorFor }));
+      return;
+    }
+    const runs = findRuns();
+    if (!runs.length) {
+      state = 'unswap';
+      anim = { t: 0, dur: 160, a, b };
+      swapCells(a, b);
+      beep(180, 0.12, 'sawtooth', 0.04);
+      return;
+    }
+    moves--; movesEl.textContent = moves;
+    startClear(planClear(runs));
+  }
+
+  // ---------- ゲーム進行 ----------
+  function start() {
+    newBoard();
+    moves = MAX_MOVES; score = 0; combo = 0; selected = null; particles = [];
+    movesEl.textContent = moves;
+    scoreEl.textContent = score;
+    overlay.classList.add('hidden');
+    state = 'idle';
+    beep(660, 0.1, 'triangle', 0.07);
+  }
+
+  function gameOver() {
+    state = 'over';
+    let isBest = false;
+    if (score > best) {
+      best = score; isBest = true;
+      try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) { /* 保存できなくても続行 */ }
+      bestEl.textContent = best;
+    }
+    setTimeout(() => {
+      ovTitle.textContent = '手数おしまい！';
+      ovText.innerHTML = 'スコア <b>' + score + '</b>' + (isBest ? '<br>ハイスコア更新！' : '<br>ベスト ' + best);
+      startBtn.textContent = 'もう一度';
+      overlay.classList.remove('hidden');
+    }, 500);
+  }
+
+  function showCombo(text) {
+    comboEl.textContent = text;
+    comboEl.classList.add('show');
+    clearTimeout(comboTimer);
+    comboTimer = setTimeout(() => comboEl.classList.remove('show'), 700);
+  }
+
+  // ---------- 描画 ----------
+  function resize() {
+    const rect = stage.getBoundingClientRect();
+    const avail = Math.min(rect.width - 16, rect.height - 16);
+    cell = Math.max(24, Math.floor(avail / N));
+    size = cell * N;
+    dpr = window.devicePixelRatio || 1;
+    cv.width = size * dpr; cv.height = size * dpr;
+    cv.style.width = size + 'px'; cv.style.height = size + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function shapePath(t, cx, cy, R) {
+    ctx.beginPath();
+    if (t === 0) { ctx.arc(cx, cy, R, 0, Math.PI * 2); }
+    else if (t === 1) { ctx.moveTo(cx, cy - R); ctx.lineTo(cx + R, cy); ctx.lineTo(cx, cy + R); ctx.lineTo(cx - R, cy); }
+    else if (t === 2) {
+      for (let i = 0; i < 10; i++) {
+        const rr = i % 2 ? R * 0.48 : R * 1.05;
+        const a = -Math.PI / 2 + i * Math.PI / 5;
+        ctx.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr);
+      }
+    }
+    else if (t === 3) { const s = R * 0.85; roundRect(cx - s, cy - s, s * 2, s * 2, R * 0.3); }
+    else if (t === 4) { ctx.moveTo(cx, cy - R); ctx.lineTo(cx + R * 0.95, cy + R * 0.75); ctx.lineTo(cx - R * 0.95, cy + R * 0.75); }
+    else {
+      for (let i = 0; i < 6; i++) {
+        const a = Math.PI / 6 + i * Math.PI / 3;
+        ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      }
+    }
+    ctx.closePath();
+  }
+  function roundRect(x, y, w, h, r) {
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+  }
+
+  function drawGem(g, x, y, scale, now) {
+    const cx = x + cell / 2, cy = y + cell / 2;
+    const R = cell * 0.38 * scale;
+    if (R <= 0.5) return;
+    if (g.s === 3) {
+      const grad = ctx.createConicGradient ? ctx.createConicGradient(now / 600, cx, cy) : null;
+      if (grad) {
+        ['#ff5f7e', '#ffb238', '#ffe45c', '#4cd97b', '#4cb8ff', '#c27dff', '#ff5f7e']
+          .forEach((col, i) => grad.addColorStop(i / 6, col));
+        ctx.fillStyle = grad;
+      } else ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.9)';
+      ctx.beginPath(); ctx.arc(cx, cy, R * 0.35, 0, Math.PI * 2); ctx.fill();
+      return;
+    }
+    const [light, dark] = PALETTE[g.t];
+    const grad = ctx.createLinearGradient(cx, cy - R, cx, cy + R);
+    grad.addColorStop(0, light); grad.addColorStop(1, dark);
+    shapePath(g.t, cx, cy, R);
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.lineWidth = Math.max(1, cell * 0.03);
+    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.stroke();
+    // ツヤ
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.beginPath(); ctx.ellipse(cx - R * 0.3, cy - R * 0.4, R * 0.28, R * 0.16, -0.5, 0, Math.PI * 2); ctx.fill();
+    if (g.s === 1 || g.s === 2) {
+      ctx.save();
+      shapePath(g.t, cx, cy, R); ctx.clip();
+      ctx.fillStyle = 'rgba(255,255,255,.75)';
+      const w = R * 0.22;
+      for (const off of [-R * 0.45, R * 0.45]) {
+        if (g.s === 1) ctx.fillRect(cx - R, cy + off - w / 2, R * 2, w);
+        else ctx.fillRect(cx + off - w / 2, cy - R, w, R * 2);
+      }
+      ctx.restore();
+    }
+  }
+
+  function draw(now) {
+    ctx.clearRect(0, 0, size, size);
+    // マス目
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+      ctx.fillStyle = (r + c) % 2 ? 'rgba(255,255,255,.04)' : 'rgba(255,255,255,.08)';
+      ctx.fillRect(c * cell, r * cell, cell, cell);
+    }
+    if (selected) {
+      ctx.strokeStyle = '#ffe36e'; ctx.lineWidth = 3;
+      ctx.strokeRect(selected[1] * cell + 2, selected[0] * cell + 2, cell - 4, cell - 4);
+    }
+    if (!grid.length) return;
+    const sw = (state === 'swap' || state === 'unswap') ? anim : null;
+    let p = sw ? Math.min(1, sw.t / sw.dur) : 0;
+    if (sw && state === 'unswap') p = 1 - p;
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+      const g = grid[r][c];
+      if (!g) continue;
+      let x = c * cell, y = (r + g.dy) * cell;
+      if (sw) {
+        const ease = p * p * (3 - 2 * p);
+        if (r === sw.a[0] && c === sw.a[1]) { x += (sw.b[1] - c) * cell * ease; y += (sw.b[0] - r) * cell * ease; }
+        else if (r === sw.b[0] && c === sw.b[1]) { x += (sw.a[1] - c) * cell * ease; y += (sw.a[0] - r) * cell * ease; }
+      }
+      if (y < -cell) continue;
+      drawGem(g, x, y, g.scale, now);
+    }
+    for (const pt of particles) {
+      ctx.globalAlpha = Math.max(0, pt.life);
+      ctx.fillStyle = pt.col;
+      ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function spawnParticles(r, c, t) {
+    const col = t < COLORS ? PALETTE[t][0] : '#fff';
+    for (let i = 0; i < 5; i++) {
+      const a = Math.random() * Math.PI * 2, sp = 60 + Math.random() * 140;
+      particles.push({ x: (c + 0.5) * cell, y: (r + 0.5) * cell, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: 2 + Math.random() * 3, life: 1, col });
+    }
+  }
+  function burstLine(s, r, c) {
+    beep(s === 3 ? 1320 : 880, 0.25, 'square', 0.05);
+    if (s === 3) return;
+    for (let i = 0; i < N; i++) {
+      const rr = s === 1 ? r : i, cc = s === 1 ? i : c;
+      particles.push({ x: (cc + 0.5) * cell, y: (rr + 0.5) * cell, vx: 0, vy: 0, r: cell * 0.2, life: 0.8, col: '#fff' });
+    }
+  }
+
+  // ---------- ループ ----------
+  let prev = performance.now();
+  function loop(now) {
+    const dt = Math.min(50, now - prev); prev = now;
+    if (anim && (state === 'swap' || state === 'unswap' || state === 'clear')) {
+      anim.t += dt;
+      if (state === 'clear') {
+        const p = Math.min(1, anim.t / anim.dur);
+        for (const k of anim.plan.set) {
+          const g = grid[Math.floor(k / N)][k % N];
+          if (g) g.scale = 1 - p;
+        }
+      }
+      if (anim.t >= anim.dur) {
+        const a = anim; anim = null;
+        if (state === 'swap') afterSwap(a.a, a.b);
+        else if (state === 'unswap') state = 'idle';
+        else if (state === 'clear') finishClear(a.plan);
+      }
+    }
+    if (state === 'fall') {
+      let moving = false;
+      const v = dt / 1000 * 14;
+      for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+        const g = grid[r][c];
+        if (g.dy < 0) { g.dy = Math.min(0, g.dy + v); moving = true; }
+      }
+      if (!moving) settle();
+    }
+    for (const pt of particles) {
+      pt.x += pt.vx * dt / 1000; pt.y += pt.vy * dt / 1000;
+      pt.vy += 300 * dt / 1000; pt.life -= dt / 600;
+    }
+    particles = particles.filter((pt) => pt.life > 0);
+    draw(now);
+    requestAnimationFrame(loop);
+  }
+
+  // ---------- 入力 ----------
+  let down = null;
+  function cellAt(e) {
+    const rect = cv.getBoundingClientRect();
+    const x = e.clientX - rect.left, y = e.clientY - rect.top;
+    const c = Math.floor(x / cell), r = Math.floor(y / cell);
+    return inside(r, c) ? [r, c] : null;
+  }
+  cv.addEventListener('pointerdown', (e) => {
+    if (state !== 'idle') return;
+    const p = cellAt(e);
+    if (!p) return;
+    e.preventDefault();
+    down = { p, x: e.clientX, y: e.clientY, used: false };
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!down || down.used || state !== 'idle') return;
+    const dx = e.clientX - down.x, dy = e.clientY - down.y;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < cell * 0.35) return;
+    down.used = true;
+    const [r, c] = down.p;
+    const t = Math.abs(dx) > Math.abs(dy) ? [r, c + Math.sign(dx)] : [r + Math.sign(dy), c];
+    if (inside(t[0], t[1])) trySwap(down.p, t);
+  });
+  window.addEventListener('pointerup', () => {
+    if (!down) return;
+    const d = down; down = null;
+    if (d.used || state !== 'idle') return;
+    const p = d.p;
+    if (selected && Math.abs(selected[0] - p[0]) + Math.abs(selected[1] - p[1]) === 1) {
+      trySwap(selected, p);
+    } else if (selected && selected[0] === p[0] && selected[1] === p[1]) {
+      selected = null;
+    } else {
+      selected = p;
+    }
+  });
+  window.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && (state === 'title' || state === 'over') && !overlay.classList.contains('hidden')) {
+      e.preventDefault(); start();
+    }
+  });
+  startBtn.addEventListener('click', start);
+  window.addEventListener('resize', resize);
+
+  resize();
+  newBoard();
+  requestAnimationFrame(loop);
+})();

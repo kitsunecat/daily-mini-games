@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-27-gem-swap",
+    "date": "2026-10-27",
+    "title": "ジェムスワップ",
+    "genre": "マッチ3パズル",
+    "inspiredBy": {
+      "title": "Royal Match",
+      "store": "App Store"
+    },
+    "description": "となりどうしの宝石を入れかえて、同じ色を3つ以上そろえて消すマッチ3パズル。4つ消しで1列まるごと消えるラインボム、5つ消しで同じ色を全部消すカラーボムが生まれる。手数は25回、連鎖をつなげてハイスコアをねらおう！",
+    "controls": "スマホ：宝石を上下左右にスワイプして入れかえ（タップで選んでから、となりをタップでもOK）。PC：マウスでドラッグ、またはクリックで選んでとなりをクリック。Enter でスタート。",
+    "files": [
+      "index.html",
+      "game.js",
+      "style.css"
+    ],
+    "screenshot": "games/2026-10-27-gem-swap/screenshot.png",
+    "slug": "2026-10-27-gem-swap"
+  },
+  {
     "id": "2026-10-26-lane-dash",
     "date": "2026-10-26",
     "title": "レーンダッシュ",

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ジェムスワップ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>MOVES</span><b id="moves">25</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="combo"></div>
+    <div id="overlay">
+      <h1 id="ov-title">ジェムスワップ</h1>
+      <p id="ov-text">となりどうしの宝石を入れかえて、<br>同じ色を3つ以上ならべて消そう。<br>4つ消しでラインボム、5つ消しでカラーボム！<br>連鎖するほど高得点。手数は25回まで。</p>
+      <p class="keys">PC: ドラッグ、またはクリック→となりをクリックで入れかえ</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
