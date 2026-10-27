@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ホールグルメ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>TIME</span><b id="time">60</b></div>
+    <div class="stat"><span>SIZE</span><b id="size">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="pop"></div>
+    <div id="overlay">
+      <h1 id="ov-title">ホールグルメ</h1>
+      <p id="ov-text">あなたは街を動きまわる「穴」。<br>自分より小さいものを飲みこんで大きくなろう。<br>大きくなるほど、車や家、ビルまで飲みこめる！<br>制限時間は60秒。</p>
+      <p class="keys">スマホ: 画面をドラッグした方向へ移動<br>PC: マウスでドラッグ、または 矢印キー / WASD</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
