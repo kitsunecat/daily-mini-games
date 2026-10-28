@@ -1,0 +1,32 @@
+{
+  "title": "ホールグルメをイチから作ろう",
+  "summary": "街を動きまわる「穴」になって、自分より小さい物を飲みこみながら大きくなっていくアクションゲームを、Canvas と素の JavaScript だけで作ります。画面より大きなワールドをカメラで映す仕組み、円どうしの当たり判定、面積で成長させるバランス調整、clip を使った吸いこみ演出まで、3D 風に見える 2D ゲームの作り方がひととおり身につきます。",
+  "level": "初級〜中級",
+  "duration": "約100分",
+  "goals": [
+    "画面より大きなワールドを translate・scale で「カメラ」から映し、追従とズームアウトをなめらかに表現できる",
+    "requestAnimationFrame と経過時間 dt を使ったゲームループで、端末の速さに左右されない動きを作れる",
+    "キーボードと Pointer Events（バーチャルスティック）の両方から、長さをそろえた移動ベクトルを作れる",
+    "種類ごとの数値を表（オブジェクト）にまとめ、ランダムに重ならず物を配置して、種類ごとに Canvas で描き分けられる",
+    "円と円の距離による当たり判定と、面積を足して半径を求める成長の仕組みを作れる",
+    "clip・globalAlpha・パーティクルの演出、localStorage のハイスコア保存、Web Audio API の効果音で仕上げられる"
+  ],
+  "prerequisites": [
+    "HTML・CSS・JavaScript の基礎（変数、関数、配列、オブジェクト、if / for）が少し分かること",
+    "テキストエディタ（VS Code など）とブラウザ（Chrome / Safari / Firefox など）",
+    "ビルドツールや外部ライブラリは使いません"
+  ],
+  "setup": "作業用のフォルダ（例: `hole-gulp`）を1つ作り、そこに `index.html`・`style.css`・`game.js` を置いて進めます。`index.html` をブラウザで直接開けば動きます。\n\nコードを書き換えたらブラウザを再読み込みして確認しましょう。うまく動かないときは開発者ツール（F12 / Mac は ⌥⌘I）の **Console** にエラーが出ていないか見てください。各ステップの「ここまでの完成形を動かす」「ここまでのコード」で、正解のコードと見比べることもできます。\n\nステップ2以降は `game.js` に少しずつコードを足していきます。「〇〇の **下** に追加」「〇〇を書きかえる」という指示をよく読んで、正しい場所に入れましょう。",
+  "steps": [
+    { "title": "ファイル構成と画面の土台", "file": "steps/01.md", "checkpoint": "checkpoints/01/" },
+    { "title": "街の地面・道路とカメラ", "file": "steps/02.md", "checkpoint": "checkpoints/02/" },
+    { "title": "穴を描いてキーボードで動かす", "file": "steps/03.md", "checkpoint": "checkpoints/03/" },
+    { "title": "ドラッグで動かすバーチャルスティック", "file": "steps/04.md", "checkpoint": "checkpoints/04/" },
+    { "title": "街に物を並べる", "file": "steps/05.md", "checkpoint": "checkpoints/05/" },
+    { "title": "車・家・ビルを描く", "file": "steps/06.md", "checkpoint": "checkpoints/06/" },
+    { "title": "飲みこんで大きくなる", "file": "steps/07.md", "checkpoint": "checkpoints/07/" },
+    { "title": "吸いこみアニメーションと歩く人", "file": "steps/08.md", "checkpoint": "checkpoints/08/" },
+    { "title": "制限時間・ハイスコア・効果音で仕上げ", "file": "steps/09.md", "checkpoint": "checkpoints/09/" }
+  ],
+  "outro": "おつかれさまでした！ 「穴が物を飲みこむ」という不思議な見た目も、中身は「カメラの座標変換」「円どうしの距離の判定」「面積を足して半径を求める」という、シンプルな仕組みの組み合わせでした。とくに、ワールドの座標のまま描いてカメラで映す考え方は、スクロールするアクションゲームやマップのあるゲームでそのまま使えます。改造アイデアを試して、自分だけの街を作ってみてください。"
+}
