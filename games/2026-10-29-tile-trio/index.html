@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>タイルトリオ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>STAGE</span><b id="stage-no">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="toast"></div>
+    <div id="overlay">
+      <h1 id="ov-title">タイルトリオ</h1>
+      <p id="ov-text">積み重なったタイルをタップすると、<br>下のトレイに移動します。<br>同じ絵柄を3つそろえると消えるよ。<br>トレイ（7マス）がいっぱいになったら負け。<br>全部消せばステージクリア！</p>
+      <p class="keys">PC: クリックで選択 / S キーでシャッフル / Enter でスタート</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <footer>
+    <button id="shuffle">🔀 シャッフル <span id="shuffle-left">1</span></button>
+  </footer>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-10-29-tile-trio",
+    "date": "2026-10-29",
+    "title": "タイルトリオ",
+    "genre": "パズル（トリプルタイルマッチ）",
+    "inspiredBy": {
+      "title": "Tile Explorer – Triple Match",
+      "store": "Google Play",
+      "rank": 8
+    },
+    "description": "積み重なったタイルの中から、上に何も乗っていないタイルをタップして下のトレイへ。同じ絵柄を3つそろえると消える。トレイは7マスだけなので、取る順番がカギ。盤面を全部消すとステージクリアで、ステージが進むほどタイルと絵柄の種類が増えていく。ピンチのときはステージごとに1回使えるシャッフルで切り抜けよう！",
+    "controls": "スマホ：取りたいタイルをタップ。下のボタンでシャッフル。PC：クリックでタイルを選択、S キーでシャッフル、Enter でスタート。",
+    "files": [
+      "index.html",
+      "game.js",
+      "style.css"
+    ],
+    "screenshot": "games/2026-10-29-tile-trio/screenshot.png",
+    "slug": "2026-10-29-tile-trio"
+  },
+  {
     "id": "2026-10-28-hole-gulp",
     "date": "2026-10-28",
     "title": "ホールグルメ",
