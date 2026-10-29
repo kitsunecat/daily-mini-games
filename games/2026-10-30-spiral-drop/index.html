@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>らせんドロップ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="toast"></div>
+    <div id="overlay">
+      <h1 id="ov-title">らせんドロップ</h1>
+      <p id="ov-text">ボールは自動でポンポン跳ねるよ。<br>左右にドラッグして塔を回し、<br>リングのすき間からボールを落とそう。<br>赤い床に当たるとゲームオーバー！<br>3段続けて落ちると、次の床を突き破れる。</p>
+      <p class="keys">PC: ドラッグ または ← → キーで回転 / Enter でスタート</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

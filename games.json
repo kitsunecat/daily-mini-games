@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-30-spiral-drop",
+    "date": "2026-10-30",
+    "title": "らせんドロップ",
+    "genre": "ハイパーカジュアル（落下アクション）",
+    "inspiredBy": {
+      "title": "Helix Jump",
+      "store": "App Store"
+    },
+    "description": "ポンポン跳ね続けるボールを、塔を回してどんどん下へ落としていくアクション。リングのすき間がボールの真下に来るように塔を回そう。赤い床に当たるとゲームオーバー。3段続けて落ちるとボールが燃えて、次の床（赤い床も！）を突き破れる。深く進むほど赤い床が増え、すき間はせまくなる。",
+    "controls": "スマホ：画面を左右にドラッグして塔を回す。PC：マウスで左右にドラッグ、または ← → キーで回転、Enter でスタート。",
+    "files": [
+      "index.html",
+      "game.js",
+      "style.css"
+    ],
+    "screenshot": "games/2026-10-30-spiral-drop/screenshot.png",
+    "slug": "2026-10-30-spiral-drop"
+  },
+  {
     "id": "2026-10-29-tile-trio",
     "date": "2026-10-29",
     "title": "タイルトリオ",
