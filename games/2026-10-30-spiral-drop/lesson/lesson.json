@@ -1,0 +1,32 @@
+{
+  "title": "らせんドロップをイチから作ろう",
+  "summary": "ポンポン跳ね続けるボールを、塔を回してリングのすき間から下へ落としていく落下アクションを、Canvas と素の JavaScript だけで作ります。重力と跳ね返りの物理、楕円の弧で描く「立体に見える回る塔」、回転角度から真下のスロットを求める当たり判定、ボールを追いかけるカメラとどこまでも続く塔の作り方まで、アクションゲームの基本がひととおり身につきます。",
+  "level": "初級〜中級",
+  "duration": "約90分",
+  "goals": [
+    "Canvas の高精細対応（devicePixelRatio）と、グラデーション・save/restore・translate/scale を使った描画ができる",
+    "requestAnimationFrame と経過時間 dt で、重力で落ちて跳ね返るボールを動かせる",
+    "ctx.ellipse の弧と描く順番の工夫で、柱のまわりを回る立体的なリングを描ける",
+    "Pointer Events のドラッグとキー入力で、塔をなめらかに回せる",
+    "回転角度からボールの真下のスロットを求め、「またいだかどうか」でリングとの当たり判定ができる",
+    "カメラの追従とリングの追加・削除で、どこまでも続くステージを作れる",
+    "コンボ・スマッシュ・パーティクル演出、localStorage のハイスコア保存、Web Audio API の効果音で仕上げられる"
+  ],
+  "prerequisites": [
+    "HTML・CSS・JavaScript の基礎（変数、関数、配列、オブジェクト、if / for）が少し分かること",
+    "テキストエディタ（VS Code など）とブラウザ（Chrome / Safari / Firefox など）",
+    "ビルドツールや外部ライブラリは使いません"
+  ],
+  "setup": "作業用のフォルダ（例: `spiral-drop`）を1つ作り、そこに `index.html`・`style.css`・`game.js` を置いて進めます。`index.html` をブラウザで直接開けば動きます。\n\nコードを書き換えたらブラウザを再読み込みして確認しましょう。うまく動かないときは開発者ツール（F12 / Mac は ⌥⌘I）の **Console** にエラーが出ていないか見てください。各ステップの「ここまでの完成形を動かす」「ここまでのコード」で、正解のコードと見比べることもできます。\n\nステップ2以降は `game.js` に少しずつコードを足していきます。「〇〇の **下** に追加」「〇〇を書きかえる」という指示をよく読んで、正しい場所に入れましょう。",
+  "steps": [
+    { "title": "ファイル構成と画面の土台", "file": "steps/01.md", "checkpoint": "checkpoints/01/" },
+    { "title": "重力で跳ねるボールとゲームループ", "file": "steps/02.md", "checkpoint": "checkpoints/02/" },
+    { "title": "柱のまわりにリングを描く", "file": "steps/03.md", "checkpoint": "checkpoints/03/" },
+    { "title": "ドラッグとキーで塔を回す", "file": "steps/04.md", "checkpoint": "checkpoints/04/" },
+    { "title": "すき間から落ちる・カメラとスコア", "file": "steps/05.md", "checkpoint": "checkpoints/05/" },
+    { "title": "赤い床とゲームオーバー", "file": "steps/06.md", "checkpoint": "checkpoints/06/" },
+    { "title": "コンボとスマッシュ・破片の演出", "file": "steps/07.md", "checkpoint": "checkpoints/07/" },
+    { "title": "ハイスコアと効果音で仕上げ", "file": "steps/08.md", "checkpoint": "checkpoints/08/" }
+  ],
+  "outro": "おつかれさまでした！ 立体的に回る塔も、中身は「12個のスロットの種類を入れた配列」と「回転角度 rot」だけでした。描くときは楕円の弧を奥と手前に分けて柱をはさみ、当たり判定では「真下の角度にあるのは何番のスロットか」を計算するだけ。見た目と判定を同じ角度で扱うのがコツです。改造アイデアを試して、自分だけの落下アクションを作ってみてください。"
+}
