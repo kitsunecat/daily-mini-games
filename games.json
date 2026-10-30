@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-31-arrow-escape",
+    "date": "2026-10-31",
+    "title": "やじるしエスケープ",
+    "genre": "パズル（脱出・順番読み）",
+    "inspiredBy": {
+      "title": "Arrows – Puzzle Escape",
+      "store": "App Store"
+    },
+    "description": "盤面に並んだやじるしブロックを、タップしてやじるしの向きへ飛ばしていくパズル。進む先にほかのブロックがあるとぶつかってハートが減ってしまう。どれから飛ばせば道が空くか、順番を読んで盤面を空っぽにしよう。早く片付けるほどクリアボーナスが増え、時間切れでもハートが1つ減る。レベルが上がるほど盤面は広く、ブロックはぎっしりに。",
+    "controls": "スマホ：ブロックをタップして飛ばす。PC：ブロックをクリック、または矢印キーでカーソルを動かして Space / Enter で飛ばす。Enter でスタート。",
+    "files": [
+      "index.html",
+      "game.js",
+      "style.css"
+    ],
+    "screenshot": "games/2026-10-31-arrow-escape/screenshot.png",
+    "slug": "2026-10-31-arrow-escape"
+  },
+  {
     "id": "2026-10-30-spiral-drop",
     "date": "2026-10-30",
     "title": "らせんドロップ",
