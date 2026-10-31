@@ -23,6 +23,16 @@ const GROW = 0.18;
 // 穴の半径がこの値を超えるごとにサイズアップ
 const LEVELS = [0, 28, 40, 56, 78, 105, 140, 190, 250];
 
+// 時間回復アイテム（時計）の出方。ここの数字を変えると難しさを調整できる
+const CLOCK = {
+  bonus: [5, 4, 3],   // 拾うと増える秒数（1個目, 2個目, 3個目…）。長さ = 1ラウンドの最大出現数
+  firstAt: 10,        // スタートから何秒後に1個目が出るか
+  cooldown: 9,        // 拾う／消えるから次が出るまでの秒数
+  life: 7,            // 出てから消えるまでの秒数（最後の2秒は点滅）
+  near: 0.22,         // 出る場所：穴からの距離（画面に映る範囲に対する割合）
+  far: 0.38,
+};
+
 // 物の種類：s は半径の目安（これより穴が大きければ飲みこめる）
 const KINDS = {
   cone:     { s: 6,   value: 1   },
@@ -46,6 +56,7 @@ let W = 1, H = 1;
 let state = 'title';
 let hole, objects, eating;
 let score = 0, best = 0, timeLeft = GAME_TIME, level = 1;
+let clock = null, clockSpawned = 0, clockNextAt = CLOCK.firstAt, elapsed = 0;
 const cam = { x: 0, y: 0, dist: 600 };
 let lastT = 0;
 const input = { dx: 0, dy: 0, active: false, sx: 0, sy: 0 };
@@ -78,6 +89,7 @@ function tone(freq, dur, type = 'sine', vol = 0.12, slide = 0) {
   o.stop(a.currentTime + dur);
 }
 const gulpSound = (s) => tone(900 - Math.min(700, s * 7), 0.18, 'triangle', 0.1, 0.45);
+const clockSound = () => { tone(988, 0.1, 'sine', 0.12); setTimeout(() => tone(1319, 0.1, 'sine', 0.12), 80); setTimeout(() => tone(1760, 0.22, 'sine', 0.1), 160); };
 const levelSound = () => { tone(523, 0.12, 'square', 0.07); setTimeout(() => tone(784, 0.2, 'square', 0.07), 110); };
 
 // ---------- 3D の準備 ----------
@@ -290,6 +302,33 @@ const marks = new THREE.InstancedMesh(
 marks.frustumCulled = false;
 marks.count = 0;
 scene.add(marks);
+// 時計アイテム：大きさ 1 で作って、穴の大きさに合わせて拡大する
+const clockGroup = new THREE.Group();
+{
+  const face = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.35, 32).rotateX(Math.PI / 2), new THREE.MeshLambertMaterial({ color: '#ffcf3f' }));
+  const dial = new THREE.Mesh(new THREE.CircleGeometry(0.8, 32), new THREE.MeshBasicMaterial({ color: '#fffaf0' }));
+  dial.position.z = 0.18;
+  const back = dial.clone();
+  back.rotation.y = Math.PI;
+  back.position.z = -0.18;
+  const handMat = new THREE.MeshBasicMaterial({ color: '#333' });
+  const h1 = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.55, 0.02).translate(0, 0.25, 0), handMat);
+  const h2 = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.4, 0.02).translate(0, 0.18, 0).rotateZ(-Math.PI / 2), handMat);
+  h1.position.z = h2.position.z = 0.2;
+  const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.22, 12).translate(0, 1.1, 0), body.material);
+  face.add(body, dial, back, h1, h2, knob);
+  face.position.y = 2.2;
+  clockGroup.add(face);
+  clockGroup.userData.face = face;
+  const ring = new THREE.Mesh(new THREE.RingGeometry(1.1, 1.5, 40), new THREE.MeshBasicMaterial({ color: '#ffe36e', transparent: true, opacity: 0.8, fog: false }));
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.y = 0.3;
+  clockGroup.add(ring);
+}
+clockGroup.visible = false;
+scene.add(clockGroup);
+
 const MARK_H = { tree: 3.2, car: 1.4, bus: 1.6, house: 2.8, building: 3.0, tower: 5.0 };
 
 // ---------- 画面サイズ ----------
@@ -375,6 +414,7 @@ function reset() {
   hole = { x: WORLD_W / 2, y: WORLD_H / 2, r: 20, area: 400, vr: 20 };
   eating = [];
   score = 0; level = 1; timeLeft = GAME_TIME;
+  clock = null; clockSpawned = 0; clockNextAt = CLOCK.firstAt; elapsed = 0;
   cam.x = hole.x; cam.y = hole.y; cam.dist = targetDist();
   updateHud();
 }
@@ -430,7 +470,46 @@ function targetDist() {
   return (view / 2) / Math.tan(Math.min(vf, hf) / 2);
 }
 
+// 穴から少し離れた、画面に映る場所に時計を出す
+function spawnClock() {
+  const view = hole.r * 7 + 200;
+  for (let i = 0; i < 20; i++) {
+    const a = rand(0, Math.PI * 2);
+    const d = view * rand(CLOCK.near, CLOCK.far);
+    const x = hole.x + Math.cos(a) * d, y = hole.y + Math.sin(a) * d * 0.8;
+    if (x < 40 || y < 40 || x > WORLD_W - 40 || y > WORLD_H - 40) continue;
+    clock = { x, y, t: 0, bonus: CLOCK.bonus[clockSpawned] };
+    clockSpawned++;
+    pop('⏰ 時計が出た！');
+    tone(1175, 0.08, 'sine', 0.08); setTimeout(() => tone(1175, 0.08, 'sine', 0.08), 140);
+    return;
+  }
+}
+
+function updateClock(dt) {
+  if (!clock) {
+    if (clockSpawned < CLOCK.bonus.length && elapsed >= clockNextAt) spawnClock();
+    return;
+  }
+  clock.t += dt;
+  const size = Math.max(18, hole.r * 0.7);
+  if (Math.hypot(clock.x - hole.x, clock.y - hole.y) < hole.r + size * 0.6) {
+    timeLeft += clock.bonus;
+    pop(`+${clock.bonus}秒！`);
+    clockSound();
+    timeEl.classList.remove('gain');
+    void timeEl.offsetWidth;
+    timeEl.classList.add('gain');
+    clock = null;
+    clockNextAt = elapsed + CLOCK.cooldown;
+  } else if (clock.t >= CLOCK.life) {
+    clock = null;
+    clockNextAt = elapsed + CLOCK.cooldown;
+  }
+}
+
 function update(dt) {
+  elapsed += dt;
   timeLeft -= dt;
   if (timeLeft <= 0) { timeLeft = 0; updateHud(); gameOver(); return; }
 
@@ -488,6 +567,8 @@ function update(dt) {
     placeObj(o, fall * (hole.vr * 2.6 + o.s * 3), o.t * 1.4, 1 - o.t * 0.3);
   }
 
+  updateClock(dt);
+
   // カメラ
   cam.x += (hole.x - cam.x) * Math.min(1, dt * 6);
   cam.y += (hole.y - cam.y) * Math.min(1, dt * 6);
@@ -526,6 +607,20 @@ function draw() {
     marks.setMatrixAt(n++, tmpM);
   }
   marks.count = n;
+
+  // 時計アイテム
+  if (clock && state === 'play') {
+    const now = performance.now() / 1000;
+    const size = Math.max(18, hole.r * 0.7);
+    const left = CLOCK.life - clock.t;
+    clockGroup.visible = left > 2 ? true : Math.floor(now * 8) % 2 === 0;
+    clockGroup.position.set(clock.x, Math.sin(now * 4) * size * 0.15, clock.y);
+    const grow = Math.min(1, clock.t * 4);
+    clockGroup.scale.setScalar(size * grow);
+    clockGroup.userData.face.rotation.y = now * 2.5;
+  } else {
+    clockGroup.visible = false;
+  }
   marks.instanceMatrix.needsUpdate = true;
 
   renderer.render(scene, camera);

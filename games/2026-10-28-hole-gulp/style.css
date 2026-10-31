@@ -32,6 +32,12 @@ header {
 .stat span { display: block; font-size: 10px; color: #9cb4c8; letter-spacing: .08em; }
 .stat b { font-size: 20px; }
 #time.low { color: #ff7a6b; }
+#time.gain { animation: gain .7s ease-out; }
+@keyframes gain {
+  0% { color: #fff36e; transform: scale(1.6); }
+  100% { transform: scale(1); }
+}
+.stat b { display: inline-block; }
 #stage {
   position: relative;
   flex: 1;
