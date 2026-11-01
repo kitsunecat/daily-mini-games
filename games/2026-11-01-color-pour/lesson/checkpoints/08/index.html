@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>いろみずソート</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>LEVEL</span><b id="level">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="sub">
+    <div id="timebar"><i id="timefill"></i></div>
+    <span id="timetext">0</span>
+  </div>
+  <div id="stage">
+    <div id="board"></div>
+    <div id="toast"></div>
+    <div id="overlay">
+      <h1 id="ov-title">いろみずソート</h1>
+      <p id="ov-text">ビンをタップして選び、別のビンをタップすると<br>上の色水をそそげるよ。<br>そそげるのは、同じ色の上か空のビンだけ。<br>全部のビンを1色ずつにそろえたらクリア！<br>時間切れになるとゲームオーバー。</p>
+      <p class="keys">PC: クリック、または数字キー 1〜9・0 でビンを選ぶ / Z でもどす / R でやり直し</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <footer>
+    <button id="undo">↶ もどす <small id="undoLeft">3</small></button>
+    <button id="reset">⟲ やり直し</button>
+  </footer>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

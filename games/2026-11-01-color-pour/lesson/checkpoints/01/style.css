@@ -1,0 +1,80 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: radial-gradient(circle at 50% 0%, #2c2050, #120d24 70%);
+  color: #fff;
+  font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif;
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#app { max-width: 480px; height: 100%; margin: 0 auto; display: flex; flex-direction: column; }
+header { display: flex; align-items: center; gap: 14px; padding: 10px 14px 6px; }
+.back { color: #c9b8ff; text-decoration: none; font-size: 14px; margin-right: auto; }
+.stat { text-align: center; line-height: 1.1; min-width: 40px; }
+.stat span { display: block; font-size: 10px; color: #a99bd6; letter-spacing: .08em; }
+.stat b { font-size: 20px; }
+#sub { display: flex; align-items: center; gap: 10px; padding: 0 14px 8px; }
+#timebar { flex: 1; height: 8px; border-radius: 4px; background: rgba(255,255,255,.12); overflow: hidden; }
+#timefill { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ff7aa8, #7ad7ff); border-radius: 4px; }
+#timefill.low { background: #ff5a6e; }
+#timetext { font-size: 13px; min-width: 28px; text-align: right; color: #d8cfff; font-variant-numeric: tabular-nums; }
+#stage { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 6px; }
+#board { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 26px 12px; width: 100%; }
+.tube {
+  position: relative;
+  width: var(--tw, 46px);
+  height: calc(var(--seg, 34px) * 4 + 18px);
+  border: 3px solid rgba(255,255,255,.75);
+  border-top: none;
+  border-radius: 0 0 22px 22px;
+  background: rgba(255,255,255,.06);
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0 3px 3px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s;
+}
+.tube::before {
+  content: ""; position: absolute; top: 0; left: -3px; right: -3px; height: 3px;
+  background: rgba(255,255,255,.75); border-radius: 2px;
+}
+.tube.sel { transform: translateY(-16px); box-shadow: 0 10px 18px rgba(255,255,255,.18); }
+.tube.done { border-color: #ffe27a; }
+.tube.done::before { background: #ffe27a; }
+.tube.shake { animation: shake .3s; }
+@keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.tube.cursor { outline: 2px dashed rgba(255,255,255,.5); outline-offset: 5px; }
+.seg { height: var(--seg, 34px); flex: none; transition: height .18s ease; }
+.seg:first-child { border-radius: 0 0 16px 16px; }
+.seg.new { animation: fill .25s ease; }
+@keyframes fill { from { height: 0; } }
+.tube .num { position: absolute; top: -20px; left: 0; right: 0; text-align: center; font-size: 11px; color: rgba(255,255,255,.35); }
+#toast {
+  position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(.8);
+  font-size: 30px; font-weight: 800; color: #ffe27a; text-shadow: 0 2px 10px rgba(0,0,0,.6);
+  opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+#overlay {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; text-align: center; padding: 20px; background: rgba(18,13,36,.88); border-radius: 16px;
+}
+#overlay.hide { display: none; }
+#overlay h1 { font-size: 30px; background: linear-gradient(90deg, #ff7aa8, #ffe27a, #7ad7ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#overlay p { font-size: 14px; line-height: 1.7; color: #e3dcff; }
+#overlay .keys { font-size: 12px; color: #a99bd6; }
+#start {
+  margin-top: 6px; padding: 14px 34px; font-size: 18px; font-weight: 700; color: #241a45;
+  background: linear-gradient(90deg, #ffb3cd, #ffe27a); border: none; border-radius: 999px; cursor: pointer;
+}
+footer { display: flex; gap: 12px; padding: 8px 14px 16px; justify-content: center; }
+footer button {
+  flex: 1; max-width: 180px; padding: 12px; font-size: 15px; font-weight: 700; color: #fff;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25); border-radius: 14px; cursor: pointer;
+}
+footer button:disabled { opacity: .35; cursor: default; }
+footer small { font-size: 12px; color: #ffe27a; margin-left: 4px; }
