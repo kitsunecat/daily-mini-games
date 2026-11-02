@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>あわあわシューター</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="sub">
+    <span>あと</span>
+    <div id="shots"></div>
+    <span>発で段が下がる</span>
+  </div>
+  <div id="stage">
+    <canvas id="cv" width="360" height="600"></canvas>
+    <div id="toast"></div>
+    <div id="overlay">
+      <h1 id="ov-title">あわあわシューター</h1>
+      <p id="ov-text">画面をなぞってねらいを決め、指をはなすと<br>あわが飛ぶよ。壁ではね返せる。<br>同じ色を3つ以上つなげるとパチン！<br>ぶら下がったあわもまとめて落ちる。<br>あわが下の線まで来たらゲームオーバー。</p>
+      <p class="keys">下のあわをタップで次の色と入れかえ<br>PC: マウスでねらってクリック / ←→ でねらい・Space で発射・X で入れかえ</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
