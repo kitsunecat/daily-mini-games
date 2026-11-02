@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-11-03-spin-dart",
+    "date": "2026-11-03",
+    "title": "くるくるダーツ",
+    "genre": "タイミング（投げ刺し）",
+    "inspiredBy": {
+      "title": "Knife Hit",
+      "store": "Google Play"
+    },
+    "description": "くるくる回る木のまとに、下からダーツを1本ずつ投げて刺していくタイミングゲーム。すでに刺さっているダーツに当たったら即アウト。まとのふちに浮かぶ星に刺すと+5点のボーナス。持っているダーツを全部刺せばまとがはじけてステージクリア。ステージが進むと回転が速くなったり緩急がついたりし、5ステージごとのボスは逆回転もしてくる。",
+    "controls": "スマホ：画面をタップでダーツを投げる。PC：クリック または Space で投げる。Enter でスタート。",
+    "files": [
+      "index.html",
+      "game.js",
+      "style.css"
+    ],
+    "screenshot": "games/2026-11-03-spin-dart/screenshot.png",
+    "slug": "2026-11-03-spin-dart"
+  },
+  {
     "id": "2026-11-02-bubble-pop",
     "date": "2026-11-02",
     "title": "あわあわシューター",
