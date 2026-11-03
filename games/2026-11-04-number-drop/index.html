@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>かさねてポン</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>NEXT</span><b id="next" class="chip">4</b></div>
+    <div class="stat"><span>MAX</span><b id="maxv">2</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv" width="360" height="560"></canvas>
+    <div id="toast"></div>
+    <div id="overlay">
+      <h1 id="ov-title">かさねてポン</h1>
+      <p id="ov-text">数字ブロックを好きな列に落とそう。<br>同じ数字がとなり合うと合体して2倍に！<br>3つ以上まとめてくっつくと一気に大きくなる。<br>連鎖でどんどん大きな数字を作ろう。<br>どの列にも置けなくなったらおしまい。</p>
+      <p class="keys">PC: クリック または ←→ で列を選んで Space / ↓ で落とす / Enter でスタート</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
