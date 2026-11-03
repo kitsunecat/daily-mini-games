@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>くるくるダーツ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>STAGE</span><b id="stage-no">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="sub"><span>のこり</span><div id="darts"></div></div>
+  <div id="stage">
+    <canvas id="cv" width="360" height="600"></canvas>
+    <div id="toast"></div>
+    <div id="overlay">
+      <h1 id="ov-title">くるくるダーツ</h1>
+      <p id="ov-text">回るまとに向かってダーツを投げよう。<br>タップするたびに1本飛んでいく。<br>刺さっているダーツに当てたらアウト！<br>まわりの星に刺すとボーナス点。<br>全部刺せばステージクリア。</p>
+      <p class="keys">PC: クリック または Space で投げる / Enter でスタート</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
