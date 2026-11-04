@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>じんとりライン</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>TIME</span><b id="time">90</b></div>
+    <div class="stat"><span>陣地</span><b id="score">0%</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0%</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv" width="360" height="360"></canvas>
+    <div id="toast"></div>
+    <div id="overlay">
+      <h1 id="ov-title">じんとりライン</h1>
+      <p id="ov-text">陣地から飛び出すと線が引かれるよ。<br>陣地に戻ると、線で囲んだ場所がまるごと自分のものに！<br>引いている途中の線に自分や敵がぶつかると…？<br>敵の線を横切ればその敵を倒せる。<br>90秒でどれだけ広げられるかな。</p>
+      <p class="keys">スマホ: スワイプで向きを変える / PC: 矢印キー・WASD、Enter でスタート</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">画面のどこをスワイプしてもOK</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
