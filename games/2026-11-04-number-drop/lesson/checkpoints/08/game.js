@@ -1,0 +1,338 @@
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const cv = $('cv');
+  const ctx = cv.getContext('2d');
+  const W = 360, H = 560;
+  const COLS = 5, ROWS = 7, CELL = 64;
+  const GX = (W - COLS * CELL) / 2, GY = 92;
+  const PREVIEW_Y = 22;
+  const BEST_KEY = 'dmg-number-drop-best';
+
+  let grid, blocks, score, best = 0, maxV, cur, next, selCol = 2;
+  let state = 'title'; // title | ready | busy | over
+  let shake = 0, flash = 0;
+  let waiters = [];
+  let audio = null;
+
+  try { best = parseInt(localStorage.getItem(BEST_KEY), 10) || 0; } catch (e) { best = 0; }
+  $('best').textContent = best;
+
+  // ---------- helpers ----------
+  const cellX = (c) => GX + c * CELL;
+  const cellY = (r) => GY + (ROWS - 1 - r) * CELL;
+  const exp2 = (v) => Math.round(Math.log2(v));
+  function color(v) {
+    const e = exp2(v);
+    const hue = (200 + e * 41) % 360;
+    const light = e > 10 ? 48 : 56;
+    return { fill: `hsl(${hue},72%,${light}%)`, dark: `hsl(${hue},70%,${light - 18}%)` };
+  }
+  function label(v) {
+    if (v < 10000) return String(v);
+    if (v < 1e6) return Math.floor(v / 1000) + 'K';
+    return Math.floor(v / 1e6) + 'M';
+  }
+  function height(c) {
+    let h = 0;
+    while (h < ROWS && grid[c][h]) h++;
+    return h;
+  }
+  function randValue() {
+    const top = Math.max(3, Math.min(8, exp2(maxV) - 2));
+    // smaller numbers more often
+    let total = 0;
+    const ws = [];
+    for (let e = 1; e <= top; e++) { const w = 1 / e; ws.push(w); total += w; }
+    let r = Math.random() * total;
+    for (let i = 0; i < ws.length; i++) { r -= ws[i]; if (r <= 0) return 2 ** (i + 1); }
+    return 2;
+  }
+  function sleep(ms) { return new Promise((res) => setTimeout(res, ms)); }
+  function settled() { return new Promise((res) => waiters.push(res)); }
+
+  // ---------- sound ----------
+  function beep(freq, dur = 0.12, type = 'triangle', vol = 0.12) {
+    try {
+      if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+      if (audio.state === 'suspended') audio.resume();
+      const t = audio.currentTime;
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, t);
+      o.frequency.exponentialRampToValueAtTime(freq * 1.5, t + dur);
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      o.connect(g).connect(audio.destination);
+      o.start(t); o.stop(t + dur + 0.02);
+    } catch (e) { /* ignore */ }
+  }
+
+  // ---------- UI ----------
+  let toastTimer = 0;
+  function toast(text) {
+    const el = $('toast');
+    el.textContent = text;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 900);
+  }
+  function updateHud() {
+    $('score').textContent = score;
+    $('maxv').textContent = label(maxV);
+    const n = $('next');
+    n.textContent = label(next);
+    n.style.background = color(next).fill;
+    if (score > best) {
+      best = score;
+      $('best').textContent = best;
+      try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) { /* ignore */ }
+    }
+  }
+
+  // ---------- game ----------
+  function makeBlock(v, c, r, y) {
+    const b = { v, c, r, x: cellX(c), y: y == null ? cellY(r) : y, tx: cellX(c), ty: cellY(r), pop: 0, dying: false, alpha: 1 };
+    blocks.push(b);
+    return b;
+  }
+  function reset() {
+    grid = Array.from({ length: COLS }, () => Array(ROWS).fill(null));
+    blocks = [];
+    score = 0; maxV = 2;
+    cur = randValue(); next = randValue();
+    updateHud();
+  }
+  function start() {
+    reset();
+    $('overlay').classList.add('hide');
+    state = 'ready';
+    beep(520, 0.1);
+  }
+  function canPlace(v) {
+    for (let c = 0; c < COLS; c++) {
+      const h = height(c);
+      if (h < ROWS || grid[c][ROWS - 1].v === v) return true;
+    }
+    return false;
+  }
+  function gameOver() {
+    state = 'over';
+    beep(180, 0.5, 'sawtooth', 0.1);
+    $('ov-title').textContent = 'ゲームオーバー';
+    $('ov-text').innerHTML = `スコア <b>${score}</b><br>いちばん大きな数字 <b>${label(maxV)}</b><br>ベスト ${best}`;
+    $('start').textContent = 'もう一度';
+    setTimeout(() => $('overlay').classList.remove('hide'), 500);
+  }
+
+  async function drop(c) {
+    if (state !== 'ready') return;
+    const h = height(c);
+    let b;
+    if (h >= ROWS) {
+      const top = grid[c][ROWS - 1];
+      if (top.v !== cur) { shake = 0.3; beep(140, 0.12, 'square', 0.06); return; }
+      state = 'busy';
+      top.v *= 2; top.pop = 1; score += top.v;
+      beep(300 + exp2(top.v) * 40, 0.14);
+      b = top;
+    } else {
+      state = 'busy';
+      b = makeBlock(cur, c, h, PREVIEW_Y);
+      grid[c][h] = b;
+      await settled();
+      beep(240, 0.05, 'sine', 0.08);
+    }
+    await resolve([b]);
+    maxV = Math.max(maxV, ...blocks.map((x) => x.v));
+    cur = next; next = randValue();
+    updateHud();
+    if (!canPlace(cur)) { gameOver(); return; }
+    state = 'ready';
+  }
+
+  async function resolve(active) {
+    let combo = 0;
+    const prevMax = maxV;
+    while (active.length) {
+      const b = active.pop();
+      if (b.dying) continue;
+      const nb = [];
+      for (const [dc, dr] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        const c = b.c + dc, r = b.r + dr;
+        if (c < 0 || c >= COLS || r < 0 || r >= ROWS) continue;
+        const o = grid[c][r];
+        if (o && o.v === b.v) nb.push(o);
+      }
+      if (!nb.length) continue;
+      combo++;
+      for (const o of nb) {
+        grid[o.c][o.r] = null;
+        o.dying = true; o.tx = b.tx; o.ty = b.ty;
+      }
+      b.v *= 2 ** nb.length;
+      b.pop = 1;
+      score += b.v * combo;
+      flash = 0.15;
+      beep(300 + exp2(b.v) * 40 + combo * 30, 0.16);
+      updateHud();
+      await sleep(160);
+      const moved = gravity();
+      await settled();
+      active.push(...moved, b);
+    }
+    if (combo >= 2) toast(`${combo} れんさ！`);
+    const m = Math.max(...blocks.map((x) => x.v));
+    if (m > prevMax && m >= 64) setTimeout(() => toast(`${label(m)} たっせい！`), combo >= 2 ? 600 : 0);
+  }
+
+  function gravity() {
+    const moved = [];
+    for (let c = 0; c < COLS; c++) {
+      let w = 0;
+      for (let r = 0; r < ROWS; r++) {
+        const b = grid[c][r];
+        if (!b) continue;
+        if (r !== w) {
+          grid[c][w] = b; grid[c][r] = null;
+          b.r = w; b.ty = cellY(w);
+          moved.push(b);
+        }
+        w++;
+      }
+    }
+    return moved;
+  }
+
+  // ---------- loop ----------
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    let moving = false;
+    for (const b of blocks) {
+      const sp = 1600 * dt;
+      const dx = b.tx - b.x, dy = b.ty - b.y;
+      const d = Math.hypot(dx, dy);
+      if (b.dying) {
+        b.alpha -= dt * 7;
+        if (d > 0.5) { const k = Math.min(1, (900 * dt) / d); b.x += dx * k; b.y += dy * k; }
+        moving = true;
+      } else if (d > 0.5) {
+        const k = Math.min(1, sp / d);
+        b.x += dx * k; b.y += dy * k;
+        moving = true;
+      } else { b.x = b.tx; b.y = b.ty; }
+      if (b.pop > 0) b.pop = Math.max(0, b.pop - dt * 5);
+    }
+    blocks = blocks.filter((b) => !(b.dying && b.alpha <= 0));
+    if (!moving && waiters.length) { const ws = waiters; waiters = []; ws.forEach((f) => f()); }
+    if (shake > 0) shake = Math.max(0, shake - dt);
+    if (flash > 0) flash = Math.max(0, flash - dt);
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+  function drawBlock(v, x, y, scale = 1, alpha = 1) {
+    const s = (CELL - 6) * scale;
+    const cx = x + CELL / 2, cy = y + CELL / 2;
+    const col = color(v);
+    ctx.globalAlpha = Math.max(0, alpha);
+    roundRect(cx - s / 2, cy - s / 2 + 3, s, s, 12 * scale);
+    ctx.fillStyle = col.dark; ctx.fill();
+    roundRect(cx - s / 2, cy - s / 2, s, s - 2, 12 * scale);
+    ctx.fillStyle = col.fill; ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.18)';
+    roundRect(cx - s / 2 + 5, cy - s / 2 + 4, s - 10, s * 0.28, 8 * scale); ctx.fill();
+    const t = label(v);
+    const fs = (t.length <= 2 ? 28 : t.length === 3 ? 24 : 19) * scale;
+    ctx.font = `800 ${fs}px system-ui, sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(0,0,0,.25)';
+    ctx.fillText(t, cx, cy + 2);
+    ctx.fillStyle = '#fff';
+    ctx.fillText(t, cx, cy);
+    ctx.globalAlpha = 1;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    if (shake > 0) ctx.translate(Math.sin(shake * 80) * 5 * (shake / 0.3), 0);
+    // board
+    roundRect(GX - 6, GY - 6, COLS * CELL + 12, ROWS * CELL + 12, 14);
+    ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.fill();
+    for (let c = 0; c < COLS; c++) {
+      if (c === selCol && state !== 'title' && state !== 'over') {
+        ctx.fillStyle = 'rgba(126,224,255,.10)';
+        ctx.fillRect(cellX(c), GY, CELL, ROWS * CELL);
+      }
+      for (let r = 0; r < ROWS; r++) {
+        roundRect(cellX(c) + 4, cellY(r) + 4, CELL - 8, CELL - 8, 10);
+        ctx.fillStyle = 'rgba(255,255,255,.035)'; ctx.fill();
+      }
+    }
+    // danger line
+    ctx.strokeStyle = 'rgba(255,120,120,.35)';
+    ctx.setLineDash([6, 6]); ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(GX, GY - 3); ctx.lineTo(GX + COLS * CELL, GY - 3); ctx.stroke();
+    ctx.setLineDash([]);
+    // blocks
+    for (const b of blocks) if (b.dying) drawBlock(b.v, b.x, b.y, 0.9, b.alpha);
+    for (const b of blocks) if (!b.dying) drawBlock(b.v, b.x, b.y, 1 + Math.sin(b.pop * Math.PI) * 0.12);
+    // preview
+    if (state === 'ready') {
+      const px = cellX(selCol);
+      const h = height(selCol);
+      const ly = h >= ROWS ? GY : cellY(h);
+      ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 2;
+      ctx.setLineDash([4, 6]);
+      ctx.beginPath(); ctx.moveTo(px + CELL / 2, PREVIEW_Y + CELL); ctx.lineTo(px + CELL / 2, ly + 4); ctx.stroke();
+      ctx.setLineDash([]);
+      drawBlock(cur, px, PREVIEW_Y, 0.92 + Math.sin(performance.now() / 250) * 0.03);
+    }
+    ctx.restore();
+    if (flash > 0) { ctx.fillStyle = `rgba(255,255,255,${flash * 0.6})`; ctx.fillRect(0, 0, W, H); }
+  }
+
+  // ---------- input ----------
+  function colFromEvent(e) {
+    const rect = cv.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * W;
+    return Math.max(0, Math.min(COLS - 1, Math.floor((x - GX) / CELL)));
+  }
+  cv.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    if (state !== 'ready') return;
+    selCol = colFromEvent(e);
+    drop(selCol);
+  });
+  cv.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'mouse') selCol = colFromEvent(e);
+  });
+  $('start').addEventListener('click', (e) => { e.stopPropagation(); start(); });
+  $('overlay').addEventListener('pointerdown', (e) => {
+    if (e.target.id !== 'start' && state !== 'busy') start();
+  });
+  window.addEventListener('keydown', (e) => {
+    if (!$('overlay').classList.contains('hide')) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); start(); }
+      return;
+    }
+    if (e.key === 'ArrowLeft') { selCol = Math.max(0, selCol - 1); e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { selCol = Math.min(COLS - 1, selCol + 1); e.preventDefault(); }
+    else if (e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); drop(selCol); }
+    else if (e.key >= '1' && e.key <= '5') { selCol = +e.key - 1; drop(selCol); }
+  });
+
+  reset();
+  requestAnimationFrame(frame);
+})();
