@@ -1,0 +1,41 @@
+name: 新作ゲームを X に投稿
+
+on:
+  push:
+    branches: [main]
+    paths: [games.json]
+  workflow_dispatch:
+    inputs:
+      game_ids:
+        description: '投稿するゲームの id（カンマ区切り。例: 2026-11-04-number-drop）'
+        required: true
+      dry_run:
+        description: '投稿せず本文の確認だけする'
+        type: boolean
+        default: true
+
+concurrency:
+  group: post-to-x
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: X に投稿
+        run: node .github/scripts/post-to-x.mjs
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          GAME_IDS: ${{ inputs.game_ids }}
+          DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}

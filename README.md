@@ -49,3 +49,12 @@ games/<id>/lesson/
 
 ステップ本文で使える Markdown: `##`〜`####` 見出し、段落、`-` / `1.` リスト、`**太字**`、`` `コード` ``、`[リンク](url)`、
 ファイル名つきコードブロック（` ```js:game.js `）、囲み（`> [!CHECK] 動作チェック`。ほかに `NOTE` / `TIP` / `WARNING`）。
+
+## X（Twitter）への自動投稿
+
+`games.json` に新しいゲームが追加されて main に push されると、GitHub Actions（`.github/workflows/post-to-x.yml`）が
+そのゲームのタイトル・ジャンル・URL とスクリーンショットを X に投稿します。GitHub Pages への反映を待ってから投稿します。
+
+- 必要な Secrets: `X_API_KEY` / `X_API_SECRET` / `X_ACCESS_TOKEN` / `X_ACCESS_TOKEN_SECRET`（未登録の間は投稿をスキップ）
+- Actions タブの「新作ゲームを X に投稿」→ Run workflow で、id を指定して手動投稿もできます（`dry_run` で本文確認のみ）
+- 投稿文は `.github/scripts/post-to-x.mjs` の `buildText()` で変更できます
