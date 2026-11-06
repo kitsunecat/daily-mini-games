@@ -1,0 +1,48 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: radial-gradient(circle at 50% 0%, #1b2a4a, #070a14 70%);
+  color: #fff;
+  font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#app { max-width: 520px; height: 100%; margin: 0 auto; display: flex; flex-direction: column; }
+header { display: flex; align-items: center; gap: 14px; padding: 10px 14px 6px; }
+.back { color: #8fd8ff; text-decoration: none; font-size: 14px; margin-right: auto; }
+.stat { text-align: center; line-height: 1.1; min-width: 50px; }
+.stat span { display: block; font-size: 10px; color: #8ea4c8; letter-spacing: .08em; }
+.stat b { font-size: 20px; font-variant-numeric: tabular-nums; }
+#life { color: #ff5d73; letter-spacing: 1px; }
+#stage { position: relative; flex: 1; min-height: 0; padding: 4px 8px; }
+#cv {
+  display: block; width: 100%; height: 100%;
+  border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,.5);
+  touch-action: none; cursor: crosshair; background: #0b1226;
+}
+#hint { text-align: center; font-size: 13px; color: #8ea4c8; padding: 6px 0 14px; }
+#ammo { color: #ffd76a; letter-spacing: 2px; }
+#ammo.reload { color: #8ea4c8; }
+#toast {
+  position: absolute; top: 18%; left: 50%; transform: translate(-50%, -50%) scale(.8);
+  font-size: 26px; font-weight: 800; color: #ffe27a; text-shadow: 0 2px 10px rgba(0,0,0,.8);
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+#overlay {
+  position: absolute; inset: 4px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; text-align: center; padding: 20px; background: rgba(7,10,20,.9); border-radius: 12px;
+}
+#overlay.hide { display: none; }
+#overlay h1 { font-size: 32px; background: linear-gradient(90deg, #6ff0ff, #ff6fd8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#overlay p { font-size: 14px; line-height: 1.7; color: #e6eeff; }
+#overlay .keys { font-size: 12px; color: #8ea4c8; }
+.red { color: #ff5d5d; }
+.blue { color: #6fc3ff; }
+#start {
+  margin-top: 6px; padding: 14px 34px; font-size: 18px; font-weight: 700; color: #0b1226;
+  background: linear-gradient(90deg, #6ff0ff, #ff6fd8); border: none; border-radius: 999px; cursor: pointer;
+}

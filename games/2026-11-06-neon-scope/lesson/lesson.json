@@ -1,0 +1,32 @@
+{
+  "title": "ネオンスコープをイチから作ろう",
+  "summary": "夜のビル街に現れる赤いターゲットを、スコープでのぞいて狙い撃つスナイパーシューティングを、HTML の Canvas と素の JavaScript だけで作ります。ランダムな街の生成、clip を使った「窓から顔を出す」表現、同じ街を座標変換で3倍に描き直すスコープ、見た目と一致する当たり判定、手ぶれ、リロード、効果音まで、2D ゲームづくりの基本がひととおり身につきます。",
+  "level": "初級〜中級",
+  "duration": "約90分",
+  "goals": [
+    "devicePixelRatio を考えて Canvas をくっきり表示し、requestAnimationFrame と dt でゲームループを作れる",
+    "ビルや窓をランダムに並べて、毎回ちがう夜の街を組み立てて描ける",
+    "ctx.clip() と save / restore で、窓の形に切り抜いて人を描ける",
+    "translate と scale の座標変換で、同じ描画関数を拡大して描き直すスコープを作れる",
+    "Pointer Events で、マウスとタッチを1つのコードで扱える",
+    "円と四角の当たり判定で、ヘッドショットと体への命中を見分けられる",
+    "ライフ・ゲームオーバー・リトライ、キーボード操作、localStorage のハイスコア保存、Web Audio API の効果音で仕上げられる"
+  ],
+  "prerequisites": [
+    "HTML・CSS・JavaScript の基礎（変数、関数、配列、if / for）が少し分かること",
+    "テキストエディタ（VS Code など）とブラウザ（Chrome / Safari / Firefox など）",
+    "ビルドツールや外部ライブラリは使いません"
+  ],
+  "setup": "作業用のフォルダ（例: `neon-scope`）を1つ作り、そこに `index.html`・`style.css`・`game.js` を置いて進めます。`index.html` をブラウザで直接開けば動きます。\n\nコードを書き換えたらブラウザを再読み込みして確認しましょう。うまく動かないときは開発者ツール（F12 / Mac は ⌥⌘I）の **Console** にエラーが出ていないか見てください。各ステップの「ここまでの完成形を動かす」「ここまでのコード」で、正解のコードと見比べることもできます。\n\nHTML と CSS はステップ1で完成させ、ステップ2以降は `game.js` だけに少しずつコードを足していきます。`game.js` は `// ---------- drawing ----------` のような見出しコメントで区切ってあるので、「〇〇の **下** に追加」「〇〇を **書きかえる**」という指示をよく読んで、正しい場所に入れましょう。",
+  "steps": [
+    { "title": "ファイル構成と画面の土台", "file": "steps/01.md", "checkpoint": "checkpoints/01/" },
+    { "title": "夜のビル街を描く", "file": "steps/02.md", "checkpoint": "checkpoints/02/" },
+    { "title": "窓と屋上に人を出す", "file": "steps/03.md", "checkpoint": "checkpoints/03/" },
+    { "title": "スコープでのぞく（ズームと手ぶれ）", "file": "steps/04.md", "checkpoint": "checkpoints/04/" },
+    { "title": "撃って当てる（当たり判定・スコア・リロード）", "file": "steps/05.md", "checkpoint": "checkpoints/05/" },
+    { "title": "ライフとゲームオーバー", "file": "steps/06.md", "checkpoint": "checkpoints/06/" },
+    { "title": "キーボードでも遊べるように", "file": "steps/07.md", "checkpoint": "checkpoints/07/" },
+    { "title": "ハイスコアと効果音で仕上げ", "file": "steps/08.md", "checkpoint": "checkpoints/08/" }
+  ],
+  "outro": "おつかれさまでした！ スコープで遠くをのぞく気持ちいい手ざわりも、中身は「同じ drawWorld() を、clip と座標変換をかけてもう一度呼ぶ」というたった数行でした。描画を「何を描くか」と「どう写すか」に分けておくと、拡大・ミニマップ・画面のゆれなどの演出がぐっと作りやすくなります。また、見た目の形（体の四角と頭の円）をそのまま当たり判定に使ったことで、プレイヤーが納得できる当たり方になったことも思い出してください。改造アイデアを試して、自分だけのスナイパーゲームに育ててみてください。"
+}
