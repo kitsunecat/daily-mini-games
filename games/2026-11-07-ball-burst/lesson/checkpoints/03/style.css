@@ -1,0 +1,41 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: radial-gradient(circle at 50% 0%, #2b1d4a, #0c0818 70%);
+  color: #fff;
+  font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#app { max-width: 520px; height: 100%; margin: 0 auto; display: flex; flex-direction: column; }
+header { display: flex; align-items: center; gap: 14px; padding: 10px 14px 6px; }
+.back { color: #b9a6ff; text-decoration: none; font-size: 14px; margin-right: auto; }
+.stat { text-align: center; line-height: 1.1; min-width: 50px; }
+.stat span { display: block; font-size: 10px; color: #a596c8; letter-spacing: .08em; }
+.stat b { font-size: 20px; font-variant-numeric: tabular-nums; }
+#stage { position: relative; flex: 1; min-height: 0; padding: 4px 8px; display: flex; justify-content: center; align-items: center; }
+#cv {
+  display: block;
+  border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,.5);
+  touch-action: none; cursor: crosshair; background: #140e28;
+}
+#hint { text-align: center; font-size: 13px; color: #a596c8; padding: 6px 0 14px; }
+#hint b { color: #fff; font-size: 15px; }
+#overlay {
+  position: absolute; inset: 4px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; text-align: center; padding: 20px; background: rgba(12,8,24,.9); border-radius: 12px;
+}
+#overlay.hide { display: none; }
+#overlay h1 { font-size: 32px; background: linear-gradient(90deg, #ffd36f, #ff6fb1, #8f7bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#overlay p { font-size: 14px; line-height: 1.7; color: #ddd3f5; }
+#overlay .keys { font-size: 12px; color: #a596c8; }
+.green { color: #6ff0a0; }
+.red { color: #ff6f8a; }
+#start {
+  font-size: 18px; font-weight: 700; padding: 14px 34px; border: 0; border-radius: 999px; cursor: pointer;
+  color: #1a0f2e; background: linear-gradient(90deg, #ffd36f, #ff8fc4);
+  box-shadow: 0 4px 16px rgba(255,140,190,.4);
+}

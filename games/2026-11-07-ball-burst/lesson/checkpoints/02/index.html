@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ボールバースト</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>STAGE</span><b id="stage-no">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">ボールバースト</h1>
+      <p id="ov-text">ねらいを決めてボールを一斉発射！<br>ブロックの数字はあと何回当てれば壊れるか。<br>壁で跳ね返るボールで一気にくずそう。<br><b class="green">緑のリング</b>に触れるとボールが増える。<br>ブロックが<b class="red">一番下の列</b>まで来たらゲームオーバー。</p>
+      <p class="keys">スマホ: 画面をドラッグでねらい、指を離して発射<br>PC: マウスでねらいクリックで発射 / ←→ でねらい Space で発射<br>発射中にタップ（または F キー）で早送り</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">ボール <b id="balls">1</b> 個 ・ ドラッグでねらって離すと発射</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
