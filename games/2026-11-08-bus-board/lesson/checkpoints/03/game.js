@@ -1,0 +1,175 @@
+(() => {
+  'use strict';
+  const W = 360;
+  let H = 650;
+  const COLS = 6, CELL = 54, GX = (W - COLS * CELL) / 2, GY = 206;
+  const BENCH = 5, SEAT_X0 = 36, SEAT_STEP = 72, BENCH_Y = 136, WALK_Y = 184;
+  const BUS_X = 22, BUS_Y = 14, BUS_W = 200, BUS_H = 70, CAP = 3;
+  const PALETTE = ['#ff5a5f', '#3fa7ff', '#ffd23f', '#3ddc84', '#b06cff', '#ff9a3c', '#ff7ad9'];
+  const WALL = -2, EMPTY = -1;
+
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const $ = id => document.getElementById(id);
+  const overlay = $('overlay'), ovTitle = $('ov-title'), ovText = $('ov-text'), startBtn = $('start');
+
+  let state = 'title';
+  let level = 1, rows = 5;
+  let grid = [], queue = [];
+
+  // ---------- helpers ----------
+  const rnd = n => Math.floor(Math.random() * n);
+  function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  const seatPos = i => ({ x: SEAT_X0 + i * SEAT_STEP, y: BENCH_Y });
+  const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+  // cells open to the top road (empty cells connected to row 0)
+  function openSet(g) {
+    const R = g.length, seen = g.map(row => row.map(() => false)), q = [];
+    for (let c = 0; c < COLS; c++) if (g[0][c] === EMPTY) { seen[0][c] = true; q.push([0, c]); }
+    while (q.length) {
+      const [r, c] = q.shift();
+      for (const [dr, dc] of DIRS) {
+        const nr = r + dr, nc = c + dc;
+        if (nr < 0 || nr >= R || nc < 0 || nc >= COLS || seen[nr][nc] || g[nr][nc] !== EMPTY) continue;
+        seen[nr][nc] = true; q.push([nr, nc]);
+      }
+    }
+    return seen;
+  }
+  function reachableMap(g) {
+    const open = openSet(g);
+    return g.map((row, r) => row.map((v, c) => {
+      if (v < 0) return false;
+      if (r === 0) return true;
+      return DIRS.some(([dr, dc]) => { const nr = r + dr, nc = c + dc; return nr >= 0 && nr < g.length && nc >= 0 && nc < COLS && open[nr][nc]; });
+    }));
+  }
+  function generate(L) {
+    rows = Math.min(4 + L, 8);
+    const nColors = Math.min(2 + L, 7);
+    const g = Array.from({ length: rows }, () => Array(COLS).fill(EMPTY));
+    const nWalls = L < 2 ? 0 : Math.min(1 + Math.floor(L / 2), 6);
+    for (let i = 0; i < nWalls; i++) g[1 + rnd(rows - 1)][rnd(COLS)] = WALL;
+    const cells = [];
+    for (let r = 0; r < rows; r++) for (let c = 0; c < COLS; c++) {
+      if (g[r][c] !== WALL) cells.push({ r, c });
+    }
+    const n = Math.floor(cells.length / 3) * 3;
+    const busCount = n / 3;
+    const buses = [];
+    for (let i = 0; i < busCount; i++) buses.push(i % nColors);
+    shuffle(buses);
+    const seq = shuffle(buses.flatMap(c => [c, c, c]));
+    for (let i = 0; i < n; i++) g[cells[i].r][cells[i].c] = seq[i];
+    return { g, buses };
+  }
+
+  // ---------- game flow ----------
+  function startStage() {
+    const s = generate(level);
+    grid = s.g; queue = s.buses.slice();
+    resize();
+    $('stage-no').textContent = level;
+  }
+  function tapCell(r, c) {
+    if (state !== 'play' || r < 0 || r >= rows || c < 0 || c >= COLS) return;
+    const v = grid[r][c];
+    if (v < 0) return;
+    const reach = reachableMap(grid);
+    if (!reach[r][c]) return;
+    grid[r][c] = EMPTY;
+  }
+
+  function startGame() {
+    overlay.classList.add('hide');
+    state = 'play';
+    startStage();
+  }
+
+  // ---------- draw ----------
+  function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
+  function person(x, y, color, alpha = 1, s = 1) {
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = 'rgba(0,0,0,.25)';
+    ctx.beginPath(); ctx.ellipse(x, y + 16 * s, 13 * s, 4 * s, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = color;
+    rr(x - 11 * s, y - 2 * s, 22 * s, 18 * s, 9 * s); ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y - 10 * s, 8.5 * s, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.45)';
+    ctx.beginPath(); ctx.arc(x - 3 * s, y - 13 * s, 3 * s, 0, 7); ctx.fill();
+    ctx.fillStyle = '#1a1a2a';
+    ctx.beginPath(); ctx.arc(x - 3 * s, y - 9 * s, 1.4 * s, 0, 7); ctx.arc(x + 3 * s, y - 9 * s, 1.4 * s, 0, 7); ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // road
+    ctx.fillStyle = '#3b4250'; ctx.fillRect(0, 0, W, 100);
+    ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 3; ctx.setLineDash([18, 14]);
+    ctx.beginPath(); ctx.moveTo(0, 96); ctx.lineTo(W, 96); ctx.stroke(); ctx.setLineDash([]);
+    // bus stop sign
+    ctx.fillStyle = '#ddd'; ctx.fillRect(W - 44, 30, 4, 66);
+    ctx.fillStyle = '#ffd84a'; ctx.beginPath(); ctx.arc(W - 42, 30, 17, 0, 7); ctx.fill();
+    ctx.fillStyle = '#3a2a00'; ctx.font = 'bold 13px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('BUS', W - 42, 31);
+    // sidewalk / bench
+    ctx.fillStyle = '#c9bfa8'; ctx.fillRect(0, 100, W, 102);
+    ctx.fillStyle = 'rgba(0,0,0,.06)';
+    for (let x = 0; x < W; x += 30) ctx.fillRect(x, 100, 1, 102);
+    for (let i = 0; i < BENCH; i++) {
+      const p = seatPos(i);
+      ctx.fillStyle = '#8a5a34'; rr(p.x - 28, p.y + 4, 56, 14, 5); ctx.fill();
+      ctx.fillStyle = '#a8703f'; rr(p.x - 28, p.y + 2, 56, 8, 4); ctx.fill();
+      ctx.strokeStyle = 'rgba(80,50,20,.35)'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); rr(p.x - 20, p.y - 24, 40, 40, 10); ctx.stroke(); ctx.setLineDash([]);
+    }
+    // plaza
+    ctx.fillStyle = '#2f6b45'; rr(GX - 6, GY - 6, COLS * CELL + 12, rows * CELL + 12, 12); ctx.fill();
+    const reach = state === 'title' ? null : reachableMap(grid);
+    for (let r = 0; r < rows; r++) for (let c = 0; c < COLS; c++) {
+      const x = GX + c * CELL, y = GY + r * CELL, v = grid[r] ? grid[r][c] : EMPTY;
+      if (v === WALL) {
+        ctx.fillStyle = '#245236'; rr(x + 3, y + 3, CELL - 6, CELL - 6, 10); ctx.fill();
+        ctx.fillStyle = '#4caf6a'; ctx.beginPath(); ctx.arc(x + CELL / 2, y + CELL / 2 - 3, 15, 0, 7); ctx.fill();
+        ctx.fillStyle = '#6fd08a'; ctx.beginPath(); ctx.arc(x + CELL / 2 - 5, y + CELL / 2 - 8, 6, 0, 7); ctx.fill();
+        continue;
+      }
+      ctx.fillStyle = (r + c) % 2 ? '#3a7d52' : '#367549'; rr(x + 2, y + 2, CELL - 4, CELL - 4, 8); ctx.fill();
+      if (v >= 0) {
+        const ok = reach && reach[r][c];
+        if (ok) { ctx.fillStyle = 'rgba(255,255,255,.14)'; rr(x + 4, y + 4, CELL - 8, CELL - 8, 8); ctx.fill(); }
+        person(x + CELL / 2, y + CELL / 2 + 2, PALETTE[v], ok ? 1 : 0.62);
+      }
+    }
+    // exit arrows
+    ctx.fillStyle = 'rgba(80,60,30,.35)';
+    for (let c = 0; c < COLS; c++) { const x = GX + c * CELL + CELL / 2; ctx.beginPath(); ctx.moveTo(x, 190); ctx.lineTo(x - 6, 198); ctx.lineTo(x + 6, 198); ctx.fill(); }
+  }
+
+  // ---------- sizing / input ----------
+  function resize() {
+    H = GY + rows * CELL + 22;
+    const st = $('stage'), aw = st.clientWidth - 16, ah = st.clientHeight - 8;
+    const s = Math.max(0.3, Math.min(aw / W, ah / H));
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    cv.style.width = Math.floor(W * s) + 'px'; cv.style.height = Math.floor(H * s) + 'px';
+    cv.width = Math.floor(W * s * dpr); cv.height = Math.floor(H * s * dpr);
+    ctx.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+
+  cv.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    const rect = cv.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width * W, y = (e.clientY - rect.top) / rect.height * H;
+    tapCell(Math.floor((y - GY) / CELL), Math.floor((x - GX) / CELL));
+  });
+  startBtn.addEventListener('click', startGame);
+
+  function loop() {
+    draw();
+    requestAnimationFrame(loop);
+  }
+  resize();
+  requestAnimationFrame(loop);
+})();

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>のりあいバス</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>STAGE</span><b id="stage-no">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">のりあいバス</h1>
+      <p id="ov-text">広場の乗客をタップしてバスに乗せよう。<br>バスと<b class="hl">同じ色</b>の乗客だけが乗れる。3人で満員、発車！<br>色がちがう乗客は<b class="hl">待合ベンチ（5席）</b>へ。<br>上の道まで<b class="hl">通り道がある乗客</b>だけ動ける。<br>ベンチが満席で動けなくなったらゲームオーバー。</p>
+      <p class="keys">スマホ: 乗客をタップ<br>PC: クリック / 矢印キーで選んで Space・Enter</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">次のバス: <span id="next"></span></div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
