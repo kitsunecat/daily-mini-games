@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>かまどピザラッシュ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>コイン</span><b id="coins">0</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+    <div class="stat"><span>ミス</span><b id="miss">○○○</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">かまどピザラッシュ</h1>
+      <p id="ov-text">店長を動かして<b class="hl">かまど</b>の前で焼きたてピザを受け取り、<br><b class="hl">カウンター</b>のお客さんに届けよう。<br>稼いだコインで床の<b class="hl">強化パネル</b>に乗ると<br>足の速さ・持てる枚数・かまどが増える。<br>待ちきれずに怒って帰るお客さんが<br><b class="hl">3人</b>になったらゲームオーバー。</p>
+      <p class="keys">スマホ: 画面のどこでも指でスライドして移動<br>PC: マウスでドラッグ / 矢印キー・WASD</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">稼いだコインの合計がスコア</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
