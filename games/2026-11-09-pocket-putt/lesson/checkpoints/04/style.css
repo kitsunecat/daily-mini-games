@@ -1,0 +1,42 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: linear-gradient(180deg, #1c3d2a, #0c1a12 75%);
+  color: #fff;
+  font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#app { max-width: 520px; height: 100%; margin: 0 auto; display: flex; flex-direction: column; }
+header { display: flex; align-items: center; gap: 12px; padding: 10px 12px 6px; }
+.back { color: #a6e8b4; text-decoration: none; font-size: 14px; margin-right: auto; white-space: nowrap; }
+.stat { text-align: center; line-height: 1.1; min-width: 44px; }
+.stat span { display: block; font-size: 10px; color: #9cc3a8; letter-spacing: .06em; white-space: nowrap; }
+.stat b { font-size: 20px; font-variant-numeric: tabular-nums; }
+#stage { position: relative; flex: 1; min-height: 0; padding: 4px 8px; display: flex; justify-content: center; align-items: center; }
+#cv { display: block; border-radius: 14px; box-shadow: 0 6px 24px rgba(0,0,0,.5); touch-action: none; cursor: crosshair; background: #2f8a45; }
+#hint { display: flex; justify-content: center; align-items: center; gap: 18px; font-size: 14px; color: #c5e6cf; padding: 6px 0 14px; min-height: 36px; font-variant-numeric: tabular-nums; }
+#par { font-weight: 700; color: #ffe27a; }
+#toast {
+  position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%) scale(.6); opacity: 0;
+  font-size: 34px; font-weight: 800; color: #fff; text-shadow: 0 3px 0 #1a5a2c, 0 0 18px rgba(0,0,0,.5);
+  pointer-events: none; transition: transform .25s, opacity .25s; white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+#overlay {
+  position: absolute; inset: 4px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; text-align: center; padding: 20px; background: rgba(8,24,14,.9); border-radius: 14px;
+}
+#overlay.hide { display: none; }
+#overlay h1 { font-size: 34px; color: #ffe27a; text-shadow: 0 3px 0 #2c7a3e; }
+#overlay p { font-size: 14px; line-height: 1.7; color: #dcefe2; }
+#overlay .keys { font-size: 12px; color: #9cc3a8; }
+.hl { color: #ffe27a; }
+#start {
+  font-size: 18px; font-weight: 700; padding: 14px 34px; border: 0; border-radius: 999px; cursor: pointer;
+  color: #123a1c; background: linear-gradient(90deg, #ffe27a, #8fe388);
+  box-shadow: 0 4px 16px rgba(160,230,120,.4);
+}

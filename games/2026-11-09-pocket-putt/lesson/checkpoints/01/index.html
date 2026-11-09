@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ポケットパター</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>HOLE</span><b id="hole">1</b></div>
+    <div class="stat"><span>残り打数</span><b id="balls">10</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="toast"></div>
+    <div id="overlay">
+      <h1 id="ov-title">ポケットパター</h1>
+      <p id="ov-text">ボールを<b class="hl">引っぱって離す</b>とショット！<br>壁に跳ね返らせてカップを狙おう。<br>打つたびに<b class="hl">残り打数</b>が1減り、<br>カップインで<b class="hl">パー−1</b>打もどる。<br>バーディーなら得、ボギーなら損。<br><b class="hl">池</b>は1打罰、<b class="hl">砂</b>はボールが止まりやすい。<br>残り打数がなくなったらゲームオーバー。</p>
+      <p class="keys">スマホ: 画面をドラッグして離す<br>PC: マウスでドラッグ / ←→で向き・↑↓で強さ・Space で打つ</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint"><span id="par">PAR 2</span><span id="strokes">今の打数 0</span></div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
