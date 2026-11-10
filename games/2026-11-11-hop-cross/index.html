@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ぴょこぴょこ横断</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">ぴょこぴょこ横断</h1>
+      <p id="ov-text">ひよこを前へ前へと進ませよう。<br><b class="hl">道路</b>では車をよけ、<b class="hl">川</b>は丸太に乗ってわたる。<br>水に落ちたり、車にぶつかったり、<br>画面の下に<b class="hl">置いていかれる</b>とゲームオーバー。</p>
+      <p class="keys">スマホ: タップで前へ / スワイプで左右・後ろ<br>PC: 矢印キー・WASD（Space でも前へ）/ クリック</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">進んだ最高の行数がスコア</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
