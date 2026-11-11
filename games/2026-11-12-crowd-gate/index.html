@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ふえふえ行進</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>人数</span><b id="count">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">ふえふえ行進</h1>
+      <p id="ov-text">左右に動いて<b class="hl">ゲート</b>をくぐり、仲間をふやそう。<br><b class="hl">＋・×</b> はふえる、<b class="hl">－・÷</b> はへる。<br>赤い軍団やノコギリにぶつかると仲間がへる。<br>道をふさぐ<b class="hl">砦</b>より人数が多ければ突破！<br>仲間が0人になるとゲームオーバー。</p>
+      <p class="keys">スマホ: 画面を左右にドラッグ<br>PC: マウスでドラッグ / ←→・A D キー</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">倒した敵の数＋進んだ距離＋砦ボーナスがスコア</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
