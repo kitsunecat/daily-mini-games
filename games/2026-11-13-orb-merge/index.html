@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ほしだま合体</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>NEXT</span><canvas id="next" width="64" height="64"></canvas></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">ほしだま合体</h1>
+      <p id="ov-text">上から<b class="hl">ほしだま</b>を落として箱に積もう。<br>同じ色・同じ大きさがふれ合うと<b class="hl">合体</b>して<br>ひとつ大きなほしだまに進化！<br>箱の上の<b class="hl">赤い線</b>をこえたまま止まると<br>ゲームオーバー。</p>
+      <p class="keys">スマホ: 左右にドラッグして指をはなすと落下<br>PC: マウスで位置を決めてクリック / ←→・A D で移動、Space で落下</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">大きく合体させるほど高得点。最大は「たいよう」</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
