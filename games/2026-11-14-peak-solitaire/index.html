@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>みつ山ソリティア</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>STAGE</span><b id="stage-no">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">みつ山ソリティア</h1>
+      <p id="ov-text">3つの山に並んだカードを片づけよう。<br>手札のカードより<b class="hl">1つ大きいか小さい</b>数の<br>表向きカードをタップすると手札に移せる。<br>（K と A はつながる）<br>続けて取るほど<b class="hl">コンボ</b>で高得点！<br>山札がなくなって動けなくなるとゲームオーバー。</p>
+      <p class="keys">スマホ: カードをタップ / 山札をタップで1枚めくる<br>PC: クリック / ←→ で選んで Enter、Space で山札</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">山を全部片づけるとステージクリア。残った山札はボーナスに</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
