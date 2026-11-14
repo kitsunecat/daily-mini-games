@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-11-15-color-exit",
+    "date": "2026-11-15",
+    "title": "いろ箱ぬけ",
+    "genre": "パズル（スライドブロック・色出口）",
+    "inspiredBy": {
+      "title": "Block Out! - Color Sort Puzzle",
+      "store": "App Store",
+      "rank": 2
+    },
+    "description": "盤面に並んだ色つきの箱をドラッグで動かし、枠にある同じ色の出口から外へ押し出すスライドパズル。箱は縦横に動かせるが、ほかの箱や石は通り抜けられず、出口より幅の広い箱は出られない。どの箱から出すか順番を考えて、全部出すとステージクリア。ステージごとに制限時間があり、残り時間がボーナスになる。続けて出すとコンボで得点アップ。ステージが進むと色・箱・石が増えていく。時間切れでゲームオーバー。",
+    "controls": "スマホ：箱を指でドラッグして動かし、同じ色の出口へ押し出す。PC：マウスでドラッグ、または Tab / Q E で箱を選んで ← ↑ → ↓（WASD）で1マスずつ移動。Enter / Space でスタート。",
+    "files": [
+      "index.html",
+      "game.js",
+      "style.css"
+    ],
+    "screenshot": "games/2026-11-15-color-exit/screenshot.png",
+    "slug": "2026-11-15-color-exit"
+  },
+  {
     "id": "2026-11-14-peak-solitaire",
     "date": "2026-11-14",
     "title": "みつ山ソリティア",
