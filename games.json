@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-11-16-screw-sort",
+    "date": "2026-11-16",
+    "title": "ねじねじ箱づめ",
+    "genre": "パズル（ねじ外し・色仕分け）",
+    "inspiredBy": {
+      "title": "Screw Jam: Nuts & Bolts Puzzle",
+      "store": "App Store"
+    },
+    "description": "何枚も重なった木の板を留めている色つきのねじをタップで外し、同じ色の箱へ仕分けるパズル。箱は3本でいっぱいになって次の箱と入れ替わる。合う箱がないねじは5マスのトレイへ。ねじが全部外れた板は落ちて、下に隠れていたねじが外せるようになる。上に板が重なっているねじは外せない。箱の色の順番を見ながら外すねじを選ぼう。全部仕分けるとレベルクリアで、進むほど板と色が増える。トレイがあふれて動けなくなったらゲームオーバー。",
+    "controls": "スマホ：ねじをタップして外す。PC：ねじをマウスでクリック。Enter / Space でスタート。",
+    "files": [
+      "index.html",
+      "game.js",
+      "style.css"
+    ],
+    "screenshot": "games/2026-11-16-screw-sort/screenshot.png",
+    "slug": "2026-11-16-screw-sort"
+  },
+  {
     "id": "2026-11-15-color-exit",
     "date": "2026-11-15",
     "title": "いろ箱ぬけ",

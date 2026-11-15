@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ねじねじ箱づめ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>LEVEL</span><b id="level">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">ねじねじ箱づめ</h1>
+      <p id="ov-text">板を留めている<b class="hl">ねじをタップ</b>して外そう。<br>ねじは<b class="hl">同じ色の箱</b>へ。箱は3本でいっぱい。<br>合う箱がないねじは下の<b class="hl">トレイ（5マス）</b>へ。<br>ねじが全部外れた板は落ちて、下のねじが出てくる。<br>上に板が重なっているねじは外せない。<br>トレイがあふれて動けなくなったらゲームオーバー。</p>
+      <p class="keys">スマホ: ねじをタップ ／ PC: ねじをクリック・Enter/Space でスタート</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">箱の色の順番をよく見て、外すねじを選ぼう！</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
