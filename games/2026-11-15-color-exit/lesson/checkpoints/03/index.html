@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>いろ箱ぬけ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>STAGE</span><b id="stage-no">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="timebar"><div id="timefill"></div><span id="timetext">0</span></div>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">いろ箱ぬけ</h1>
+      <p id="ov-text">箱を<b class="hl">ドラッグ</b>して動かし、<br>枠にある<b class="hl">同じ色の出口</b>から外へ出そう。<br>出口より幅の広い箱は通れない。<br>ほかの箱がじゃまなら、出す順番を考えて！<br>全部出すとステージクリア。<br><b class="hl">時間切れ</b>でゲームオーバー。</p>
+      <p class="keys">スマホ: 箱を指でドラッグ<br>PC: マウスでドラッグ / Tab・Q E で箱を選んで ←↑→↓ で移動</p>
+      <button id="start">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">早くクリアするほど残り時間ボーナス。連続で出すとコンボ！</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
