@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ころころペイント迷路</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>LEVEL</span><b id="level">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="bar">
+    <div class="pill">手数のこり <b id="moves">0</b></div>
+    <div class="pill">ライフ <b id="lives">♥♥♥</b></div>
+    <button id="retry" type="button">↺ やり直し</button>
+  </div>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">ころころペイント迷路</h1>
+      <p id="ov-text"><b class="hl">スワイプ</b>するとボールが<b class="hl">壁にぶつかるまで</b>転がり、<br>通った床に色がぬられる。<br>迷路の床を<b class="hl">全部ぬる</b>とレベルクリア！<br>手数が尽きるとライフが1つ減ってやり直し。<br>ライフが0になったらゲームオーバー。</p>
+      <p class="keys">スマホ: 上下左右にスワイプ ／ PC: 矢印キー・WASD かマウスでドラッグ</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">止まる場所を考えて、少ない手数でぬりきろう！</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
