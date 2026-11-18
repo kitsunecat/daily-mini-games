@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ロープスイング</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>DIST</span><b id="score">0</b></div>
+    <div class="stat"><span>★</span><b id="stars">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">ロープスイング</h1>
+      <p id="ov-text">画面を<b class="hl">押している間</b>だけ、近くのフックにロープをかけてブランコ。<br><b class="hl">はなす</b>と勢いのまま空へ飛び出す！<br>フックからフックへ渡って、どこまで進めるか挑戦しよう。<br>★を取るとボーナス。下のトゲに落ちたらゲームオーバー。</p>
+      <p class="keys">スマホ: 長押しでロープ / はなしてジャンプ<br>PC: マウス長押し または Space キー長押し</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">前へ振り上がったところではなすと遠くへ飛べるよ</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
