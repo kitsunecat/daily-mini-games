@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>六角タイル積みかさね</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>LEVEL</span><b id="level">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="bar">
+    <div class="pill">次のレベルまで <b id="goal">0</b></div>
+    <div class="pill">空きマス <b id="free">19</b></div>
+  </div>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">六角タイル積みかさね</h1>
+      <p id="ov-text">下に並んだ<b class="hl">六角タイルの山</b>を盤面の空きマスに置こう。<br>となりの山と<b class="hl">いちばん上の色</b>が同じなら、<br>その色のタイルが自動で集まってくる。<br>同じ色が<b class="hl">10枚</b>そろうと消えて得点！<br>盤面が埋まって置けなくなったらゲームオーバー。</p>
+      <p class="keys">スマホ: 山をタップしてマスをタップ（ドラッグでもOK）<br>PC: マウスでクリック / ドラッグ、1〜3キーで山を選択</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">同じ色の山どうしを隣りに置くと、どんどん集まるよ</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
