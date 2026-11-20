@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>くるりんリング</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>MOVES</span><b id="moves">20</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">くるりんリング</h1>
+      <p id="ov-text">3重のリングを回して、<b class="hl">内・中・外の3つの玉の色</b>を<br>同じ方向（放射状）にそろえると消える！<br>リングの<b class="hl">右半分をタップで時計回り</b>、<b class="hl">左半分で反時計回り</b>。<br>1回まわすと手数が1減り、消すと手数が回復。<br>手数が0になったらゲームオーバー。</p>
+      <p class="keys">スマホ: リングをタップ（右側＝時計回り / 左側＝反時計回り）<br>PC: クリック、またはキー Q/W/E（内/中/外を時計回り）・A/S/D（反時計回り）</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="hint">連鎖で消すとスコアが倍増！</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
