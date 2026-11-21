@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>さらさら砂ブロック</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">さらさら砂ブロック</h1>
+      <p id="ov-text">落としたブロックは<b class="hl">さらさらの砂</b>になって崩れる！<br>同じ色の砂を<b class="hl">左のかべから右のかべまで</b><br>つなげると、その色がまとめて消える。<br>砂が<b class="hl">赤い線</b>より上で止まったらゲームオーバー。</p>
+      <p class="keys">スマホ: 左右になぞって位置合わせ → 指を離すと落下 / 「回転」ボタン<br>PC: マウスで同じ操作、または ←→ 移動・↑ 回転・Space 落下</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="bar">
+    <div class="next"><span>NEXT</span><canvas id="nextcv" width="64" height="64"></canvas></div>
+    <div id="hint">連鎖で消すとスコアが倍増！</div>
+    <button id="rot" type="button">⟳ 回転</button>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
