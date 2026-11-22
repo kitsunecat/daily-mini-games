@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ぽんぽんキューブ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="info">
+    <div id="level">Lv 1</div>
+    <div id="risebar"><div id="risefill"></div></div>
+    <div id="combo"></div>
+  </div>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">ぽんぽんキューブ</h1>
+      <p id="ov-text">となり合った<b class="hl">同じ色のキューブ</b>（2個以上）をタップで消そう。<br>たくさんまとめて消すほど高得点！<br><b class="hl">6個以上</b>消すと<b class="hl">ばくだん</b>が出現。<br>下から列がせり上がってくるので、<br>キューブが天井をこえたらゲームオーバー。</p>
+      <p class="keys">タップ: 消す / 「せり上げ」で1列追加（ボーナス）<br>PC: クリック、または矢印キー＋Space・↑ でせり上げ</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="bar">
+    <div id="msg">同じ色をまとめて消そう</div>
+    <button id="pushbtn" type="button">⬆ せり上げ</button>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
