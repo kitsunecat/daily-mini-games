@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>おひるねにゃんこ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="info">
+    <div id="level">ステージ 1</div>
+    <div id="timebar"><div id="timefill"></div></div>
+    <div id="time">120</div>
+  </div>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">おひるねにゃんこ</h1>
+      <p id="ov-text">色ちがいの<b class="hl">ざぶとん</b>に、ねこを1匹ずつ寝かせよう。<br><b class="hl">たて・よこの列</b>にもねこは1匹ずつ。<br>ねこどうしは<b class="hl">となり（ななめも）</b>に寝られない。<br>全部そろえるとクリア！時間切れでゲームオーバー。</p>
+      <p class="keys">タップ: 空き → ×（ねこ無し） → ねこ → 空き<br>なぞる: まとめて × / PC: クリック・矢印キー＋Space</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="bar">
+    <button id="hintbtn" type="button">💡 ヒント（-10秒）</button>
+    <div id="msg">ねこ 0 / 5</div>
+    <button id="clearbtn" type="button">リセット</button>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
