@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>つみ牌ペア</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>STAGE</span><b id="stageNo">1</b></div>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="info">
+    <div id="timebar"><div id="timefill"></div></div>
+    <div id="left">残り 0</div>
+  </div>
+  <div id="board-wrap">
+    <div id="board"></div>
+    <div id="combo"></div>
+    <div id="overlay">
+      <h1 id="ov-title">つみ牌ペア</h1>
+      <p id="ov-text">積み上がった牌から<b class="hl">同じ絵柄の2枚</b>を順にタップして消そう。<br>取れるのは<b class="hl">上に何も乗っていない</b>、かつ<b class="hl">左か右があいている</b>牌だけ（明るく表示）。<br>時間内に全部消すとステージクリア！<br>手づまりで交換も使い切るか、時間切れでゲームオーバー。</p>
+      <p class="keys">スマホ: 牌をタップ / ヒント・シャッフルボタン<br>PC: クリック、H でヒント、S でシャッフル</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="bar">
+    <button id="hintbtn" type="button">ヒント <b id="hintN">3</b></button>
+    <div id="msg">同じ絵柄をペアで消そう</div>
+    <button id="shufbtn" type="button">シャッフル <b id="shufN">2</b></button>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
