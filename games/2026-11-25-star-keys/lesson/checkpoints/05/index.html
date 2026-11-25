@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ほしふるけんばん</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="info">
+    <div id="stars"><i></i><i></i><i></i></div>
+    <div id="speed">x1.0</div>
+  </div>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">ほしふるけんばん</h1>
+      <p id="ov-text">上から落ちてくる<b class="hl">黒いタイル</b>を、<br>いちばん下のものから順にタップしよう。<br>タップするたびにメロディーが鳴るよ。<br><b class="hl">長いタイル</b>は押したままでボーナス。<br>何もない列をタップするか、<br>タイルを見逃すとゲームオーバー。</p>
+      <p class="keys">スマホ: タイルの列をタップ（長いタイルは長押し）<br>PC: クリック、または D F J K キー</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="bar"><div id="msg">音を鳴らしながらタイルを追いかけよう</div></div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
