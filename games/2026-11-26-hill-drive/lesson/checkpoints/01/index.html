@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>おかのぼりドライブ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="info">
+    <div class="pill"><span id="dist">0</span> m</div>
+    <div class="pill coin"><i></i><span id="coins">0</span></div>
+    <div id="fuel"><span>FUEL</span><div id="fuelbar"><b id="fuelfill"></b></div></div>
+  </div>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="pedals">
+      <div class="pedal" id="pd-brake">ブレーキ<small>◀ バック</small></div>
+      <div class="pedal gas" id="pd-gas">アクセル<small>前へ ▶</small></div>
+    </div>
+    <div id="overlay">
+      <h1 id="ov-title">おかのぼりドライブ</h1>
+      <p id="ov-text">でこぼこの丘をクルマで<b class="hl">どこまでも</b>走ろう。<br>画面の<b class="hl">右半分</b>でアクセル、<b class="hl">左半分</b>でブレーキ。<br>空中ではアクセルで前が上がり、<br>ブレーキで前が下がるよ。<br><b class="hl">燃料タンク</b>を拾わないとガス欠に。<br>ひっくり返って頭をぶつけたらおしまい。</p>
+      <p class="keys">スマホ: 右半分/左半分を長押し<br>PC: → / D でアクセル、← / A でブレーキ</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="bar"><div id="msg">スコア = 距離(m) + コイン × 10</div></div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
