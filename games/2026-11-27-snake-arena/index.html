@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>にょろにょろアリーナ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>LENGTH</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <ol id="board"></ol>
+    <div id="kills">たおした数 <b id="kc">0</b></div>
+    <div id="boost">ダッシュ</div>
+    <div id="overlay">
+      <h1 id="ov-title">にょろにょろアリーナ</h1>
+      <p id="ov-text">光るエサを食べて<b class="hl">ヘビを長く</b>しよう。<br>進みたい方向を<b class="hl">タッチ</b>すると曲がるよ。<br>頭がほかのヘビの体にぶつかるとアウト。<br>逆に、相手の前に回りこんで<br>ぶつけさせれば<b class="hl">エサがどっさり</b>！<br><b class="hl">ダッシュ</b>すると速いけど少し縮む。</p>
+      <p class="keys">スマホ: 進みたい方向をタッチ / 右下ボタンでダッシュ<br>PC: マウスの方向へ進む・クリック長押しでダッシュ<br>（← → キーで旋回、Space でダッシュ）</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="bar"><div id="msg">アリーナの外周の赤い壁にも注意！</div></div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
