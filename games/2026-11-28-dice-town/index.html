@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>サイコロすごろくタウン</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>STARS</span><b id="score">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="hud">
+    <div class="pill coin">🪙 <b id="coins">0</b></div>
+    <div class="pill dice">🎲 <b id="dice">0</b></div>
+  </div>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="overlay">
+      <h1 id="ov-title">サイコロすごろくタウン</h1>
+      <p id="ov-text">サイコロをふって盤を一周しながら<b class="hl">コイン</b>を集めよう。<br>コインで<b class="hl">タウンを建てる</b>と★が増えて、<br>マスでもらえるコインもアップ！<br><b class="hl">×2・×3</b>にするとサイコロを多く使うけど<br>もらえる量も倍に。<br>サイコロが<b class="hl">0</b>になったら終了。★の数がスコア。</p>
+      <p class="keys">スマホ: ボタンをタップ<br>PC: Space / Enter でふる・M で倍率・B で建てる</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+  <div id="msg">GO を通過するとボーナス！</div>
+  <div id="controls">
+    <button id="mult" type="button" aria-label="倍率">×1</button>
+    <button id="roll" type="button">ふる！</button>
+    <button id="build" type="button"><span>建てる</span><small id="cost">🪙100</small></button>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
