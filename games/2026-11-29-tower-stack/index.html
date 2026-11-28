@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ぴったりタワー</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <a class="back" href="../../">← 一覧</a>
+    <div class="stat"><span>SCORE</span><b id="score">0</b></div>
+    <div class="stat"><span>COMBO</span><b id="combo">0</b></div>
+    <div class="stat"><span>BEST</span><b id="best">0</b></div>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="toast"></div>
+    <div id="overlay">
+      <h1 id="ov-title">ぴったりタワー</h1>
+      <p id="ov-text">左右から滑ってくるブロックを、タップで<b class="hl">下の段の真上</b>に止めて積み上げよう。<br>はみ出した部分は切り落とされ、ブロックはどんどん小さくなる。<br><b class="hl">ぴったり</b>重ねるとコンボ！ 3連続以上でブロックが少し大きくなる。<br>完全に外したらゲームオーバー。</p>
+      <p class="keys">スマホ: 画面をタップ<br>PC: クリック または Space / Enter</p>
+      <button id="start" type="button">タップでスタート</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
