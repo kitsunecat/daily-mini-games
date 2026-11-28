@@ -1,0 +1,33 @@
+{
+  "title": "サイコロすごろくタウンをイチから作ろう",
+  "summary": "サイコロを2つふって20マスの盤をぐるぐる回り、コインを集めてタウンを育てるすごろくゲームを、Canvas と素の JavaScript だけで作ります。マスの並びを座標の配列で表すしくみ、Promise と async / await で「待ってから次へ」を順番に書くアニメーション、マスごとに効果を切りかえる switch、確率で分かれるチャンスマス、倍率と建設コストのバランス、Web Audio の効果音と localStorage のハイスコア保存まで、ひととおり身につきます。",
+  "level": "初級〜中級",
+  "duration": "約100分",
+  "goals": [
+    "Canvas を高解像度ディスプレイでもくっきり描けるように準備し、requestAnimationFrame で毎フレーム描き直すループを作れる",
+    "盤の外周のマスを「列・行」の配列で表し、マスの番号から画面の座標を求められる",
+    "Promise と async / await を使って、「サイコロを転がす → 1マスずつ進む → マスの効果」を上から順に読めるコードで書ける",
+    "tween（0→1 に進む補間）でコマをなめらかに動かし、sin でぴょんと跳ねさせられる",
+    "switch 文と Math.random() で、マスの種類や確率ごとに違う効果を出せる",
+    "倍率・建設コスト・収入アップの数式で、ゲームのバランスを調整できる",
+    "Web Audio API の効果音と localStorage のハイスコアで、ゲームとして仕上げられる"
+  ],
+  "prerequisites": [
+    "HTML・CSS・JavaScript の基礎（変数、関数、配列、オブジェクト、if / for）が少し分かること",
+    "テキストエディタ（VS Code など）とブラウザ（Chrome / Safari / Firefox など）",
+    "async / await や Promise は初めてでも大丈夫です。出てきたところで説明します。ビルドツールや外部ライブラリは使いません"
+  ],
+  "setup": "作業用のフォルダ（例: `dice-town`）を1つ作り、そこに `index.html`・`style.css`・`game.js` を置いて進めます。`index.html` をブラウザで直接開けば動きます。\n\nコードを書き換えたらブラウザを再読み込みして確認しましょう。うまく動かないときは開発者ツール（F12 / Mac は ⌥⌘I）の **Console** にエラーが出ていないか見てください。各ステップの「ここまでの完成形を動かす」「ここまでのコード」で、正解のコードと見比べることもできます。\n\nHTML と CSS はステップ1で完成させ、ステップ2以降は `game.js` だけに少しずつコードを足していきます。`game.js` は `// ---- 状態 ----` や `// ---- 描画 ----` のような見出しコメントで区切っていくので、「〇〇の **下** に追加」「〇〇を **書きかえる**」という指示をよく読んで、正しい場所に入れましょう。",
+  "steps": [
+    { "title": "ファイル構成と画面の土台", "file": "steps/01.md", "checkpoint": "checkpoints/01/" },
+    { "title": "Canvas に 20 マスの盤を描く", "file": "steps/02.md", "checkpoint": "checkpoints/02/" },
+    { "title": "コマを置いて 1 マスずつ進める", "file": "steps/03.md", "checkpoint": "checkpoints/03/" },
+    { "title": "サイコロを描いて転がす", "file": "steps/04.md", "checkpoint": "checkpoints/04/" },
+    { "title": "Web Audio で効果音を鳴らす", "file": "steps/05.md", "checkpoint": "checkpoints/05/" },
+    { "title": "マスの効果でコインを集める", "file": "steps/06.md", "checkpoint": "checkpoints/06/" },
+    { "title": "チャンスマスとワープ", "file": "steps/07.md", "checkpoint": "checkpoints/07/" },
+    { "title": "タウンを建てて倍率で勝負する", "file": "steps/08.md", "checkpoint": "checkpoints/08/" },
+    { "title": "ゲームオーバーとハイスコアで完成", "file": "steps/09.md", "checkpoint": "checkpoints/09/" }
+  ],
+  "outro": "おつかれさまでした！ 盤は「マスの種類の配列」と「マスの座標の配列」の2つだけ、進行は async / await で「ふる → 進む → 効果」を上から順に書くだけでした。そこに倍率と建設コストという2つの数式を足すだけで、「いつ ×3 にするか」「いつ建てるか」を考えるゲームになります。マスの並びや数字を変えて、自分だけのタウンに育ててみてください。"
+}
